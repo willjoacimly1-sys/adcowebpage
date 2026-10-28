@@ -1,0 +1,4 @@
+# Raw downloads the cleaned assets were made from
+assets-src/
+.claude/
+.DS_Store

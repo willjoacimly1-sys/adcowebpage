@@ -1,0 +1,1315 @@
+<!doctype html>
+<html lang="vi">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Kiến trúc xây dựng ADCO | Thiết kế kiến trúc & thi công xây dựng</title>
+<meta name="description" content="ADCO thiết kế kiến trúc và thi công trọn gói biệt thự, nhà phố, căn hộ cao cấp tại TP. Hồ Chí Minh và hơn 30 tỉnh thành. Vẽ cuộc sống – Dựng niềm tin.">
+<meta property="og:title" content="Kiến trúc xây dựng ADCO">
+<meta property="og:description" content="Vẽ cuộc sống – Dựng niềm tin. Thiết kế kiến trúc & thi công xây dựng cao cấp.">
+<meta property="og:image" content="https://kientrucadco.vn/wp-content/uploads/2025/12/villa-binh-chanh-20.jpg">
+<meta name="theme-color" content="#191514">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Be+Vietnam+Pro:wght@200;300;400;500&family=Noto+Serif+Display:ital,wght@0,300;1,300&display=swap" rel="stylesheet">
+<style>
+:root{
+  --ink:#191514;
+  --ink-raised:#231e1c;
+  --amber:#D37204;
+  --amber-deep:#A35700;
+  --stone:#E7E7E7;
+  --mist:#F2F1EF;
+  --graphite:#666666;
+  --white:#FFFFFF;
+  --on-ink-muted:#A9A3A0;
+  --line-on-ink:rgba(255,255,255,.14);
+  --line-on-light:#D9D7D4;
+  --sans:"Be Vietnam Pro",system-ui,sans-serif;
+  --serif:"Noto Serif Display",Georgia,serif;
+  --gutter:clamp(16px,5vw,72px);
+  --max:1360px;
+  --ease:cubic-bezier(.2,.7,.1,1);
+}
+*,*::before,*::after{box-sizing:border-box}
+html{scroll-behavior:smooth;scroll-padding-top:84px;-webkit-text-size-adjust:100%}
+body{margin:0;background:var(--white);color:var(--ink);font:300 17px/1.65 var(--sans);-webkit-font-smoothing:antialiased;overflow-x:hidden}
+img{display:block;max-width:100%}
+a{color:inherit}
+button{font:inherit;color:inherit;background:none;border:0;cursor:pointer;padding:0}
+:focus-visible{outline:2px solid var(--amber);outline-offset:3px}
+html[lang="vi"] [data-l="en"],html[lang="en"] [data-l="vi"]{display:none!important}
+.wrap{max-width:var(--max);margin:0 auto;padding:0 var(--gutter)}
+.sr-only{position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0 0 0 0);white-space:nowrap}
+.skip{position:absolute;left:16px;top:-60px;background:var(--amber);color:var(--ink);padding:10px 16px;z-index:200;text-decoration:none}
+.skip:focus{top:12px}
+
+/* Type scale */
+h1,h2,h3,h4{margin:0;font-weight:200;letter-spacing:-.02em;line-height:1.12}
+.h-section{font-size:clamp(2.25rem,4.6vw,4rem)}
+.h-sub{font-size:clamp(1.35rem,2vw,1.75rem);font-weight:300;letter-spacing:-.01em}
+.lede{font-size:clamp(1.05rem,1.4vw,1.25rem);max-width:36em}
+.serif{font-family:var(--serif);font-weight:300;letter-spacing:-.005em}
+.muted{color:var(--graphite)}
+.section{padding:clamp(88px,12vw,168px) 0}
+.on-ink{background:var(--ink);color:var(--white)}
+.on-ink .muted{color:var(--on-ink-muted)}
+.on-mist{background:var(--mist)}
+.section-head{display:grid;grid-template-columns:repeat(12,1fr);gap:24px;margin-bottom:clamp(48px,6vw,88px);align-items:end}
+.section-head h2{grid-column:1/span 7}
+.section-head p{grid-column:9/span 4;margin:0}
+
+/* Buttons & links */
+.btn{display:inline-flex;align-items:center;gap:12px;min-height:52px;padding:0 28px;font-weight:400;font-size:15px;letter-spacing:.01em;text-decoration:none;border:1px solid transparent;transition:background .3s,color .3s,border-color .3s}
+.btn-amber{background:var(--amber);color:var(--ink)}
+.btn-amber:hover{background:#E8840F}
+.btn-line{border-color:var(--line-on-ink);color:var(--white)}
+.btn-line:hover{border-color:var(--amber)}
+.text-link{font-weight:400;text-decoration:none;border-bottom:1px solid currentColor;padding-bottom:2px;color:var(--amber-deep)}
+.on-ink .text-link{color:var(--amber)}
+.text-link:hover{border-bottom-width:2px}
+
+/* Header */
+.site-header{position:fixed;inset:0 0 auto 0;z-index:50;transition:background .4s,border-color .4s;border-bottom:1px solid transparent}
+.site-header.solid{background:rgba(25,21,20,.94);backdrop-filter:blur(10px);border-color:var(--line-on-ink)}
+.header-inner{display:flex;align-items:center;gap:32px;height:84px;max-width:var(--max);margin:0 auto;padding:0 var(--gutter);color:var(--white)}
+.brand img{height:38px;width:auto}
+.nav{display:flex;gap:28px;margin-left:auto}
+.nav a{font-size:14px;font-weight:400;text-decoration:none;color:#D9D4D1;letter-spacing:.01em;padding:6px 0;border-bottom:1px solid transparent}
+.nav a:hover{color:var(--white);border-color:var(--amber)}
+.header-tools{display:flex;align-items:center;gap:var(--tools-gap,20px)}
+.lang{display:flex;border:1px solid var(--line-on-ink)}
+.lang button{font-size:12px;font-weight:500;letter-spacing:.08em;width:40px;height:32px;color:var(--on-ink-muted)}
+.lang button[aria-pressed="true"]{background:var(--white);color:var(--ink)}
+.header-cta{min-height:44px;padding:0 22px;font-size:14px;white-space:nowrap;max-width:280px;overflow:hidden}
+/* While the hero's own booking button is on screen the header one folds away; the nav slides over to fill the space */
+.hero-cta-on .header-cta{max-width:0;padding-left:0;padding-right:0;border-width:0;margin-left:calc(-1 * var(--tools-gap,20px));opacity:0;visibility:hidden}
+.header-anim .header-cta{transition:max-width .6s var(--ease),padding .6s var(--ease),margin .6s var(--ease),opacity .4s ease .35s,visibility 0s}
+.header-anim.hero-cta-on .header-cta{transition:opacity .25s ease,max-width .6s var(--ease) .15s,padding .6s var(--ease) .15s,margin .6s var(--ease) .15s,visibility 0s .75s}
+.nav-lang{display:none}
+.menu-btn{display:none;width:44px;height:44px;align-items:center;justify-content:center}
+.menu-btn span{display:block;width:22px;height:1px;background:var(--white);position:relative}
+.menu-btn span::before,.menu-btn span::after{content:"";position:absolute;left:0;width:22px;height:1px;background:var(--white);transition:transform .3s}
+.menu-btn span::before{top:-7px}.menu-btn span::after{top:7px}
+.menu-open .menu-btn span{background:transparent}
+.menu-open .menu-btn span::before{transform:translateY(7px) rotate(45deg)}
+.menu-open .menu-btn span::after{transform:translateY(-7px) rotate(-45deg)}
+
+/* Hero */
+.hero{position:relative;min-height:100svh;display:grid;grid-template-columns:repeat(12,1fr);gap:0 24px;align-items:end;padding:140px var(--gutter) 72px;max-width:var(--max);margin:0 auto}
+.hero-bg{background:var(--ink);color:var(--white)}
+.hero-copy{grid-column:1/span 9;grid-row:1;position:relative;z-index:2;padding-bottom:8px}
+.slogan{font-size:clamp(3.1rem,9.6vw,9.4rem);font-weight:200;letter-spacing:-.045em;line-height:1.02;margin:0 0 40px}
+.slogan .line{display:block;padding:.06em 0}
+.slogan .drawn{color:transparent;-webkit-text-stroke:1px var(--amber);paint-order:stroke}
+.slogan .built{color:var(--white);font-weight:300}
+.hero-lede{color:#D2CCC8;max-width:30em;margin:0 0 36px;font-size:clamp(1rem,1.3vw,1.15rem)}
+.hero-actions{display:flex;flex-wrap:wrap;gap:16px;align-items:center}
+.play{display:inline-flex;align-items:center;gap:14px;font-size:15px;font-weight:400;color:var(--white);min-height:52px}
+.play i{width:52px;height:52px;border:1px solid var(--line-on-ink);border-radius:50%;display:grid;place-items:center;transition:border-color .3s}
+.play:hover i{border-color:var(--amber)}
+.play svg{width:14px;height:14px;fill:var(--amber);margin-left:3px}
+.hero-figure{grid-column:7/span 6;grid-row:1;align-self:stretch;margin:0;position:relative;min-height:420px}
+.hero-figure img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;object-position:52% 50%}
+.hero-figure::after{content:"";position:absolute;inset:0;background:linear-gradient(90deg,var(--ink) 0%,rgba(25,21,20,.35) 30%,rgba(25,21,20,0) 60%)}
+.hero-figure figcaption{position:absolute;right:0;bottom:-36px;font-size:13px;color:var(--on-ink-muted)}
+.hero-rule{position:absolute;left:var(--gutter);right:var(--gutter);bottom:0;height:1px;background:var(--amber);transform-origin:left}
+@media (prefers-reduced-motion:no-preference){
+  .slogan .drawn{animation:draw 1.5s var(--ease) .2s both}
+  .slogan .built{animation:rise 1.1s var(--ease) 1.25s both}
+  .hero-lede,.hero-actions{animation:fade .9s ease 1.9s both}
+  .hero-figure{animation:fade 1.6s ease .1s both}
+  .hero-rule{animation:rule 1.6s var(--ease) 1.4s both}
+}
+@keyframes draw{from{clip-path:inset(0 100% 0 0)}to{clip-path:inset(0 0 0 0)}}
+@keyframes rise{from{clip-path:inset(100% 0 0 0);transform:translateY(.12em)}to{clip-path:inset(0 0 0 0);transform:none}}
+@keyframes fade{from{opacity:0}to{opacity:1}}
+@keyframes rule{from{transform:scaleX(0)}to{transform:scaleX(1)}}
+
+/* Signature */
+.signature-grid{display:grid;grid-template-columns:repeat(12,1fr);gap:24px}
+.signature-grid h2{grid-column:1/span 3;font-size:15px;font-weight:400;letter-spacing:.01em;color:var(--amber-deep);padding-top:14px}
+.statement{grid-column:4/span 9;font-size:clamp(1.6rem,3vw,2.6rem);line-height:1.32;margin:0;max-width:24em}
+.signature-note{grid-column:4/span 6;margin:40px 0 0;max-width:34em}
+
+/* Services */
+.services{border-top:1px solid var(--line-on-light)}
+.service{display:grid;grid-template-columns:repeat(12,1fr);gap:24px;padding:40px 0;border-bottom:1px solid var(--line-on-light);align-items:baseline}
+.service h3{grid-column:1/span 5;font-size:clamp(1.6rem,2.8vw,2.4rem)}
+.service p{grid-column:7/span 5;margin:0;color:var(--graphite)}
+
+/* Projects */
+.filters{display:flex;flex-wrap:wrap;gap:8px;margin-bottom:56px}
+.filters button{font-size:14px;font-weight:400;padding:10px 18px;border:1px solid var(--line-on-ink);color:#D2CCC8;transition:border-color .3s,color .3s}
+.filters button:hover{color:var(--white)}
+.filters button[aria-pressed="true"]{border-color:var(--amber);color:var(--white)}
+.proj-grid{display:grid;grid-template-columns:repeat(12,1fr);gap:72px 24px}
+.proj-card{display:block;text-align:left;width:100%}
+/* Crops a region (--x --y --w --h, as fractions) out of a source image and covers the frame with it */
+.crop-frame{position:relative;overflow:hidden;container-type:size}
+.crop{position:absolute;left:50%;top:50%;width:max(100cqw,calc(100cqh * var(--ar)));aspect-ratio:var(--ar);transform:translate(-50%,-50%);overflow:hidden}
+.crop img{position:absolute;max-width:none;height:auto;width:calc(100% / var(--w));left:calc(-100% * var(--x) / var(--w));top:calc(-100% * var(--y) / var(--h))}
+.proj-card .ph{background:var(--ink-raised);aspect-ratio:4/3}
+.proj-card .crop{transition:transform 1.2s var(--ease)}
+.proj-card:hover .crop,.proj-card:focus-visible .crop{transform:translate(-50%,-50%) scale(1.035)}
+.proj-card .cap{padding-top:20px}
+.proj-card h3{font-size:clamp(1.4rem,2.2vw,1.9rem);font-weight:300}
+.proj-card .meta{display:block;font-size:14px;color:var(--on-ink-muted);margin-top:10px}
+.proj-card .tag{display:block;font-family:var(--serif);font-style:italic;color:#CFC8C4;font-size:16px;margin-top:6px}
+/* Concepts: tall cards for the 3D design concepts from ADCO's recent posts */
+.concept-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:48px 24px}
+.concept-card{display:block;text-align:left;width:100%}
+.concept-card .ph{aspect-ratio:3/4;background:var(--stone)}
+.concept-card .crop{transition:transform 1.2s var(--ease)}
+.concept-card:hover .crop,.concept-card:focus-visible .crop{transform:translate(-50%,-50%) scale(1.035)}
+.concept-card h3{font-size:1.35rem;font-weight:300;letter-spacing:-.01em;margin-top:20px}
+.concept-card .tag{display:block;font-family:var(--serif);font-style:italic;color:var(--graphite);font-size:15px;margin-top:6px}
+.concept-card .meta{display:block;font-size:14px;color:var(--graphite);margin-top:10px}
+.proj-card:nth-child(4n+1){grid-column:1/span 7}
+.proj-card:nth-child(4n+2){grid-column:9/span 4;margin-top:140px}
+.proj-card:nth-child(4n+2) .ph{aspect-ratio:3/4}
+.proj-card:nth-child(4n+3){grid-column:2/span 4}
+.proj-card:nth-child(4n+3) .ph{aspect-ratio:4/5}
+.proj-card:nth-child(4n+4){grid-column:7/span 6;margin-top:96px}
+.proj-card:nth-child(4n+4) .ph{aspect-ratio:3/2}
+
+/* Proof */
+.proof{font-size:clamp(1.7rem,3.6vw,3.15rem);font-weight:200;line-height:1.28;letter-spacing:-.02em;margin:0;max-width:21em}
+.proof b{font-weight:400;color:var(--amber-deep)}
+
+/* Process */
+.steps{list-style:none;margin:0;padding:0;display:grid;grid-template-columns:repeat(4,1fr);gap:24px;counter-reset:s}
+.steps li{border-top:1px solid var(--amber);padding-top:28px;counter-increment:s}
+.steps li::before{content:counter(s);display:block;font-size:56px;font-weight:200;line-height:1;color:var(--amber-deep);margin-bottom:28px}
+.steps h3{font-size:1.35rem;font-weight:400;margin-bottom:12px;letter-spacing:-.01em}
+.steps p{margin:0;color:var(--graphite);font-size:16px}
+.process-note{margin:56px 0 0;color:var(--graphite)}
+
+/* About */
+.about-grid{display:grid;grid-template-columns:repeat(12,1fr);gap:24px;align-items:start}
+.about-portrait{grid-column:1/span 4;margin:0}
+.about-portrait img{width:100%;max-width:340px;aspect-ratio:276/415;object-fit:cover;filter:grayscale(.15)}
+.about-portrait figcaption{margin-top:16px;font-size:15px}
+.about-portrait figcaption span{display:block;color:var(--on-ink-muted);font-size:14px}
+.about-body{grid-column:6/span 7}
+.about-body h2{margin-bottom:36px}
+.about-body p{max-width:36em;color:#D2CCC8}
+.creed{font-size:clamp(1.6rem,2.8vw,2.4rem);line-height:1.3;color:var(--white)!important;margin:48px 0!important}
+.about-links{display:flex;flex-wrap:wrap;gap:16px 28px;align-items:center;margin-top:12px}
+
+/* Stories */
+.stories{display:grid;grid-template-columns:repeat(3,1fr);gap:24px}
+.story{border-top:1px solid var(--line-on-light);padding-top:28px;display:flex;flex-direction:column}
+.story p{font-size:clamp(1.25rem,1.7vw,1.5rem);line-height:1.45;margin:0 0 28px;flex:1}
+.story .who{font-size:15px;color:var(--graphite);margin-bottom:12px}
+.story button{align-self:flex-start}
+
+/* Trust strip: rolling partner logos directly under the hero */
+.trust{background:var(--white);padding:44px 0 48px;border-bottom:1px solid var(--line-on-light)}
+.trust h2{font-size:15px;font-weight:400;letter-spacing:.01em;color:var(--graphite);margin-bottom:32px}
+.marquee{overflow:hidden;-webkit-mask-image:linear-gradient(90deg,transparent,#000 6%,#000 94%,transparent);mask-image:linear-gradient(90deg,transparent,#000 6%,#000 94%,transparent)}
+.marquee-track{display:flex;align-items:center;width:max-content}
+.marquee-track img{height:calc(var(--h,64) * 1px);width:auto;margin-right:88px}
+@media (prefers-reduced-motion:no-preference){
+  .marquee-track{animation:marquee 40s linear infinite}
+  .marquee:hover .marquee-track{animation-play-state:paused}
+}
+@media (prefers-reduced-motion:reduce){
+  .marquee{-webkit-mask-image:none;mask-image:none}
+  .marquee-track{width:auto;flex-wrap:wrap;justify-content:center;padding:0 var(--gutter)}
+  .marquee-track img{margin:12px 28px}
+  .marquee-track img:nth-child(n+6){display:none}
+}
+@keyframes marquee{to{transform:translateX(-50%)}}
+
+/* Consultation prompt closing each section */
+.cta-strip{grid-column:1/-1;display:flex;flex-wrap:wrap;justify-content:space-between;align-items:center;gap:20px 32px;margin-top:clamp(56px,7vw,96px);padding-top:32px;border-top:1px solid var(--line-on-light)}
+.cta-strip p{margin:0;font-size:clamp(1.3rem,2vw,1.75rem);font-weight:200;letter-spacing:-.01em;max-width:28em}
+.on-ink .cta-strip{border-top-color:var(--line-on-ink)}
+
+/* Journal */
+.posts{display:grid;grid-template-columns:repeat(3,1fr);gap:24px}
+.post{display:flex;flex-direction:column;text-align:left}
+.post .ph{aspect-ratio:3/2;overflow:hidden;background:var(--stone);margin-bottom:22px}
+.post img{width:100%;height:100%;object-fit:cover;transition:transform 1.2s var(--ease)}
+.post:hover img,.post:focus-visible img{transform:scale(1.035)}
+.post h3{font-size:1.45rem;font-weight:300;margin-bottom:12px}
+.post p{margin:0 0 18px;color:var(--graphite);font-size:16px}
+.post .text-link{align-self:flex-start}
+
+/* FAQ */
+.faq-grid{display:grid;grid-template-columns:repeat(12,1fr);gap:24px}
+.faq-aside{grid-column:1/span 4}
+.faq-aside p{margin:28px 0 0;max-width:22em}
+.faq-list{grid-column:6/span 7;border-top:1px solid var(--line-on-light)}
+.faq-list details{border-bottom:1px solid var(--line-on-light)}
+.faq-list summary{list-style:none;cursor:pointer;display:flex;justify-content:space-between;gap:24px;padding:26px 0;font-size:1.15rem;font-weight:400}
+.faq-list summary::-webkit-details-marker{display:none}
+.faq-list summary::after{content:"";flex:none;width:14px;height:14px;margin-top:8px;background:linear-gradient(var(--amber-deep),var(--amber-deep)) center/14px 1px no-repeat,linear-gradient(var(--amber-deep),var(--amber-deep)) center/1px 14px no-repeat;transition:transform .35s var(--ease)}
+.faq-list details[open] summary::after{transform:rotate(45deg)}
+.faq-list details p{margin:0;padding:0 48px 28px 0;color:var(--graphite);max-width:40em}
+
+/* Contact */
+.contact-grid{display:grid;grid-template-columns:repeat(12,1fr);gap:24px}
+.contact-info{grid-column:1/span 5}
+.contact-info h2{margin-bottom:28px}
+.contact-info>p{color:#D2CCC8;max-width:28em}
+.contact-list{margin:48px 0 0;display:grid;gap:28px}
+.contact-list dt{font-size:14px;color:var(--on-ink-muted);margin-bottom:6px}
+.contact-list dd{margin:0;font-size:1.1rem;font-weight:300}
+.contact-list a{text-decoration:none}
+.contact-list a:hover{color:var(--amber)}
+.contact-list .big{font-size:clamp(1.6rem,2.6vw,2.2rem);font-weight:200;color:var(--amber)}
+.form{grid-column:7/span 6;display:grid;grid-template-columns:1fr 1fr;gap:28px 24px;align-content:start}
+.field{display:flex;flex-direction:column;gap:8px}
+.field.full{grid-column:1/-1}
+.field label{font-size:14px;color:#D2CCC8}
+.field input,.field select,.field textarea{font:300 1.05rem/1.5 var(--sans);color:var(--white);background:transparent;border:0;border-bottom:1px solid rgba(255,255,255,.3);padding:10px 0;border-radius:0;transition:border-color .3s}
+.field select{appearance:none;background:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='8'%3E%3Cpath d='M1 1l5 5 5-5' fill='none' stroke='%23D37204'/%3E%3C/svg%3E") right center no-repeat}
+.field select option{color:var(--ink)}
+.field textarea{resize:vertical;min-height:110px}
+.field input:focus,.field select:focus,.field textarea:focus{outline:0;border-bottom-color:var(--amber)}
+.field input::placeholder,.field textarea::placeholder{color:#857E7A}
+.field .err{font-size:13px;color:#F0A64E;min-height:0}
+.field[data-invalid] input{border-bottom-color:#F0A64E}
+.form-foot{grid-column:1/-1;display:flex;flex-wrap:wrap;gap:20px;align-items:center;justify-content:space-between}
+.form-foot small{color:var(--on-ink-muted);font-size:13px;max-width:26em}
+.form-status{grid-column:1/-1;margin:0;color:var(--amber);min-height:1.6em}
+
+/* Footer */
+.site-footer{background:var(--ink);color:var(--on-ink-muted);border-top:1px solid var(--line-on-ink);padding:64px 0 40px;font-size:14px}
+.foot-grid{display:grid;grid-template-columns:repeat(12,1fr);gap:24px}
+.foot-brand{grid-column:1/span 4}
+.foot-brand img{height:40px;width:auto;margin-bottom:20px}
+.foot-col{grid-column:span 2}
+.foot-col.wide{grid-column:span 4}
+.foot-col h3{font-size:14px;font-weight:400;color:var(--white);margin-bottom:16px;letter-spacing:0}
+.foot-col ul{list-style:none;margin:0;padding:0;display:grid;gap:10px}
+.foot-col a{text-decoration:none}
+.foot-col a:hover{color:var(--amber)}
+.foot-base{display:flex;flex-wrap:wrap;justify-content:space-between;gap:12px;margin-top:64px;padding-top:24px;border-top:1px solid var(--line-on-ink)}
+
+/* Floating call */
+.call-fab{position:fixed;right:16px;bottom:16px;z-index:40;display:none;align-items:center;gap:10px;background:var(--amber);color:var(--ink);text-decoration:none;font-weight:500;font-size:15px;height:52px;padding:0 20px;box-shadow:0 8px 24px rgba(25,21,20,.35)}
+.call-fab svg{width:18px;height:18px}
+
+/* Dialogs */
+dialog{border:0;padding:0;max-width:none;max-height:none;width:100%;height:100%;background:var(--ink);color:var(--white)}
+dialog::backdrop{background:rgba(25,21,20,.8)}
+.dlg-scroll{height:100%;overflow-y:auto;overscroll-behavior:contain}
+.dlg-close{position:fixed;top:20px;right:20px;z-index:5;width:52px;height:52px;border:1px solid var(--line-on-ink);border-radius:50%;background:rgba(25,21,20,.7);display:grid;place-items:center}
+.dlg-close:hover{border-color:var(--amber)}
+.dlg-close svg{width:16px;height:16px;stroke:var(--white)}
+/* Full-screen photo; its lower part fades to ink so the title and story sit over it */
+.pd-hero-slot{position:relative;height:100vh;height:100svh}
+.pd-hero{position:absolute;inset:0;background:var(--ink-raised)}
+.pd-hero-slot::after{content:"";position:absolute;inset:0;z-index:1;pointer-events:none;background:linear-gradient(180deg,rgba(25,21,20,0) 40%,rgba(25,21,20,.6) 64%,rgba(25,21,20,.92) 80%,var(--ink) 94%)}
+.pd-title{overflow:hidden;padding-top:.12em;text-shadow:0 2px 28px rgba(0,0,0,.3)}
+.pd-title>span{display:inline-block}
+
+/* Project open: the card image grows to fill the screen (JS), then the text rises in sequence */
+#projectDialog{transition:background-color .7s ease,opacity .45s ease}
+#projectDialog::backdrop{background:transparent}
+#projectDialog.pd-intro{background-color:rgba(25,21,20,0)}
+#projectDialog.pd-closing{opacity:0}
+@media (prefers-reduced-motion:no-preference){
+  #projectDialog .pd-hero-slot::after{opacity:0;transition:opacity 1s ease}
+  #projectDialog.revealed .pd-hero-slot::after{opacity:1}
+  #projectDialog .rise{opacity:0;transform:translateY(48px);transition:opacity .8s var(--ease),transform 1s var(--ease);transition-delay:calc(.35s + var(--i,0) * 90ms)}
+  #projectDialog .pd-title>span{transform:translateY(110%);transition:transform 1.1s var(--ease) .3s}
+  #projectDialog .dlg-close{opacity:0;transition:opacity .4s ease .3s}
+  #projectDialog.revealed .rise,#projectDialog.revealed .pd-title>span{opacity:1;transform:none}
+  #projectDialog.revealed .dlg-close{opacity:1}
+  .pd-hero.settle .crop{animation:heroSettle 1.3s var(--ease) both}
+}
+@keyframes heroSettle{from{transform:translate(-50%,-50%) scale(1.12)}to{transform:translate(-50%,-50%) scale(1)}}
+.pd-body{position:relative;z-index:2;display:grid;grid-template-columns:repeat(12,1fr);gap:24px;margin-top:calc(-1 * clamp(150px,22vh,240px));padding:0 0 96px}
+.pd-body header{grid-column:1/span 5}
+.pd-body h2{font-size:clamp(2.6rem,5.6vw,5rem);margin-bottom:16px}
+.pd-tag{font-family:var(--serif);font-style:italic;font-size:1.3rem;color:#CFC8C4;margin:0 0 40px}
+.pd-facts{margin:0;display:grid;grid-template-columns:auto 1fr;gap:12px 24px;font-size:15px}
+.pd-facts dt{color:var(--on-ink-muted)}
+.pd-facts dd{margin:0}
+.pd-story{grid-column:7/span 6}
+.pd-body{padding-bottom:0}
+#projectDialog .pd-cta{border-top-color:var(--line-on-ink);margin:64px 0 96px}
+.pd-cta-actions{display:flex;flex-wrap:wrap;gap:12px}
+.pd-cta-next{color:var(--on-ink-muted);margin-left:4px}
+.pd-story p{font-family:var(--serif);font-size:clamp(1.2rem,1.6vw,1.4rem);line-height:1.6;margin:0 0 1.2em;color:#E4DFDC}
+.pd-gallery{display:grid;grid-template-columns:repeat(2,1fr);gap:24px;padding-bottom:96px}
+.pd-gallery img{width:100%;height:auto;background:var(--ink-raised)}
+.pd-gallery img:only-child{grid-column:1/-1}
+.pd-next{display:flex;justify-content:space-between;align-items:center;gap:24px;border-top:1px solid var(--line-on-ink);padding:40px 0 64px}
+.pd-next button{font-size:clamp(1.4rem,2.6vw,2.2rem);font-weight:200;text-align:right}
+.pd-next button span{display:block;font-size:14px;font-weight:400;color:var(--on-ink-muted)}
+.pd-next button:hover{color:var(--amber)}
+#articleDialog{background:var(--white);color:var(--ink)}
+#articleDialog .dlg-close{background:rgba(255,255,255,.85);border-color:var(--line-on-light)}
+#articleDialog .dlg-close svg{stroke:var(--ink)}
+.art{max-width:760px;margin:0 auto;padding:120px var(--gutter) 120px}
+.art img{width:100%;aspect-ratio:3/2;object-fit:cover;margin-bottom:48px}
+.art h2{font-size:clamp(2.2rem,4.6vw,3.6rem);margin-bottom:32px}
+.art p{font-family:var(--serif);font-size:1.25rem;line-height:1.7;margin:0 0 1.2em}
+.art .btn{margin-top:24px}
+#videoDialog{background:rgba(25,21,20,.96);display:none;align-items:center;justify-content:center}
+#videoDialog[open]{display:flex}
+.video-frame{width:min(92vw,1200px);aspect-ratio:16/9;background:#000}
+.video-frame iframe{width:100%;height:100%;border:0}
+
+/* Responsive */
+@media (max-width:1180px){
+  .menu-btn{display:flex}
+  .nav{position:fixed;inset:84px 0 0 0;background:var(--ink);flex-direction:column;gap:0;padding:24px var(--gutter);margin:0;transform:translateY(-8px);opacity:0;visibility:hidden;transition:opacity .3s,transform .3s,visibility .3s;overflow-y:auto}
+  .menu-open .nav{opacity:1;visibility:visible;transform:none}
+  /* backdrop-filter would make the header the containing block for the fixed menu */
+  .menu-open .site-header{backdrop-filter:none;background:var(--ink)}
+  .nav a{font-size:1.6rem;font-weight:200;padding:14px 0;border-bottom:1px solid var(--line-on-ink);color:var(--white)}
+  .header-tools{margin-left:auto}
+}
+@media (max-width:960px){
+  .hero{grid-template-columns:1fr;padding-top:120px;align-items:start}
+  .hero-copy{grid-column:1;grid-row:1}
+  .hero-figure{grid-column:1;grid-row:2;min-height:0;aspect-ratio:4/3;margin-top:48px}
+  .hero-figure::after{background:linear-gradient(180deg,var(--ink) 0%,rgba(25,21,20,0) 30%)}
+  .hero-figure figcaption{bottom:-30px}
+  .section-head h2,.section-head p{grid-column:1/-1}
+  .signature-grid h2,.statement,.signature-note{grid-column:1/-1}
+  .service h3,.service p{grid-column:1/-1}
+  .service{gap:12px;padding:32px 0}
+  .proj-grid{grid-template-columns:1fr;gap:56px}
+  .proj-card:nth-child(n){grid-column:1;margin-top:0}
+  .proj-card:nth-child(n) .ph{aspect-ratio:4/3}
+  .steps{grid-template-columns:1fr 1fr;gap:48px 24px}
+  .concept-grid{grid-template-columns:repeat(2,1fr)}
+  .about-portrait,.about-body{grid-column:1/-1}
+  .about-portrait{display:flex;gap:20px;align-items:end}
+  .about-portrait img{max-width:160px}
+  .stories,.posts{grid-template-columns:1fr;gap:48px}
+  .faq-aside,.faq-list{grid-column:1/-1}
+  .contact-info,.form{grid-column:1/-1}
+  .form{margin-top:56px}
+  .pd-body header,.pd-story{grid-column:1/-1}
+  .foot-brand,.foot-col,.foot-col.wide{grid-column:1/-1}
+  .call-fab{display:inline-flex}
+  .site-footer{padding-bottom:96px}
+}
+@media (max-width:560px){
+  .header-inner{gap:12px;height:72px}
+  .header-tools{--tools-gap:8px}
+  .header-tools .lang{display:none}
+  .nav-lang{display:flex;align-self:flex-start;margin-top:28px}
+  .header-cta{min-height:40px;padding:0 14px;font-size:13px}
+  .trust{padding:32px 0 24px}
+  .marquee-track img{height:calc(var(--h,64) * .72px);margin-right:44px}
+  .cta-strip .btn{width:100%;justify-content:center}
+  .pd-cta-actions{width:100%}
+  .brand img{height:30px}
+  html{scroll-padding-top:72px}
+  .nav{inset:72px 0 0 0}
+  .steps{grid-template-columns:1fr}
+  .concept-grid{grid-template-columns:1fr}
+  .concept-card .ph{aspect-ratio:4/5}
+  .form{grid-template-columns:1fr}
+  .pd-gallery{grid-template-columns:1fr}
+  .hero-actions .btn{width:100%;justify-content:center}
+}
+@media (prefers-reduced-motion:reduce){
+  html{scroll-behavior:auto}
+  *,*::before,*::after{transition-duration:.01ms!important}
+}
+</style>
+</head>
+<body>
+<a class="skip" href="#main"><span data-l="vi">Bỏ qua đến nội dung</span><span data-l="en">Skip to content</span></a>
+
+<header class="site-header" id="siteHeader">
+  <div class="header-inner">
+    <a class="brand" href="#top" aria-label="ADCO, trang chủ"><img src="assets/logo/adco-white.png" alt="ADCO Architecture Design Construction" width="355" height="92"></a>
+    <nav class="nav" id="nav" aria-label="Chính">
+      <a href="#about"><span data-l="vi">Về ADCO</span><span data-l="en">About</span></a>
+      <a href="#services"><span data-l="vi">Dịch vụ</span><span data-l="en">Services</span></a>
+      <a href="#projects"><span data-l="vi">Dự án</span><span data-l="en">Projects</span></a>
+      <a href="#concepts"><span data-l="vi">Ý tưởng</span><span data-l="en">Concepts</span></a>
+      <a href="#process"><span data-l="vi">Quy trình</span><span data-l="en">Process</span></a>
+      <a href="#journal"><span data-l="vi">Tin tức</span><span data-l="en">Journal</span></a>
+      <a href="#faq"><span data-l="vi">Hỏi đáp</span><span data-l="en">FAQ</span></a>
+      <a href="#contact"><span data-l="vi">Liên hệ</span><span data-l="en">Contact</span></a>
+      <div class="lang nav-lang" role="group" aria-label="Ngôn ngữ / Language">
+        <button type="button" data-set-lang="vi" aria-pressed="true">VI</button>
+        <button type="button" data-set-lang="en" aria-pressed="false">EN</button>
+      </div>
+    </nav>
+    <div class="header-tools">
+      <div class="lang" role="group" aria-label="Ngôn ngữ / Language">
+        <button type="button" data-set-lang="vi" aria-pressed="true">VI</button>
+        <button type="button" data-set-lang="en" aria-pressed="false">EN</button>
+      </div>
+      <a class="btn btn-amber header-cta" href="#contact"><span data-l="vi">Đặt lịch tư vấn</span><span data-l="en">Book a consultation</span></a>
+      <button class="menu-btn" id="menuBtn" type="button" aria-expanded="false" aria-controls="nav"><span></span><b class="sr-only">Menu</b></button>
+    </div>
+  </div>
+</header>
+
+<main id="main">
+
+<!-- Hero -->
+<div class="hero-bg" id="top">
+  <section class="hero">
+    <div class="hero-copy">
+      <h1 class="slogan">
+        <span class="line drawn"><span data-l="vi">Vẽ cuộc sống</span><span data-l="en">Drawing life.</span></span>
+        <span class="line built"><span data-l="vi">Dựng niềm tin</span><span data-l="en">Building trust.</span></span>
+      </h1>
+      <p class="hero-lede">
+        <span data-l="vi">Thiết kế kiến trúc và thi công trọn gói cho biệt thự, nhà phố và căn hộ cao cấp. Một đội ngũ duy nhất, từ bản phác thảo đầu tiên đến ngày bạn nhận chìa khóa.</span>
+        <span data-l="en">Architecture and turnkey construction for villas, townhouses and fine apartments. One team, from the first sketch to the day you receive the keys.</span>
+      </p>
+      <div class="hero-actions">
+        <a class="btn btn-amber" href="#contact"><span data-l="vi">Đặt lịch tư vấn</span><span data-l="en">Book a consultation</span></a>
+        <button class="play" type="button" data-video="nXImHscntfQ"><i><svg viewBox="0 0 10 12" aria-hidden="true"><path d="M0 0l10 6-10 6z"/></svg></i><span data-l="vi">Xem phim giới thiệu</span><span data-l="en">Watch our film</span></button>
+      </div>
+    </div>
+    <figure class="hero-figure">
+      <img src="assets/projects/villa-dai-phuc-2400.webp" srcset="assets/projects/villa-dai-phuc-1200.webp 1200w, assets/projects/villa-dai-phuc-2400.webp 2048w" sizes="(max-width: 960px) 100vw, 50vw" alt="" width="2048" height="1402" fetchpriority="high">
+      <figcaption>Villa Đại Phúc, Bình Chánh</figcaption>
+    </figure>
+    <div class="hero-rule" aria-hidden="true"></div>
+  </section>
+</div>
+
+<!-- Trust strip -->
+<section class="trust" aria-labelledby="trustTitle">
+  <div class="wrap"><h2 id="trustTitle"><span data-l="vi">Khách hàng và đối tác tin tưởng ADCO</span><span data-l="en">Clients and partners who trust ADCO</span></h2></div>
+  <div class="marquee"><div class="marquee-track" id="logoTrack"></div></div>
+</section>
+
+<!-- Signature -->
+<section class="section" aria-labelledby="sigTitle" data-cta="signature">
+  <div class="wrap signature-grid">
+    <h2 id="sigTitle">ADCO Signature</h2>
+    <p class="statement serif">
+      <span data-l="vi">Mỗi công trình bắt đầu từ câu chuyện của một gia chủ. Chúng tôi lắng nghe trước, thiết kế bằng kỹ thuật chuẩn xác và sự tiết chế, rồi xây đúng như đã vẽ.</span>
+      <span data-l="en">Every building begins as its owner's story. We listen first, design with exact engineering and restraint, then build it exactly as drawn.</span>
+    </p>
+    <p class="signature-note muted">
+      <span data-l="vi">Quy trình minh bạch và nhất quán nghĩa là mọi quyết định đều hướng về lợi ích của bạn và chất lượng công trình. Từng chi tiết được tính toán để ngôi nhà hài hòa, bền vững và mang dấu ấn riêng của người ở.</span>
+      <span data-l="en">A transparent, consistent process means every decision is made in your interest and in the building's. Each detail is worked out so the house is balanced, durable, and unmistakably yours.</span>
+    </p>
+  </div>
+</section>
+
+<!-- Services -->
+<section class="section" id="services" aria-labelledby="svcTitle" style="padding-top:0" data-cta="services">
+  <div class="wrap">
+    <div class="section-head">
+      <h2 class="h-section" id="svcTitle"><span data-l="vi">Một đầu mối cho cả công trình</span><span data-l="en">One partner for the whole build</span></h2>
+      <p class="muted"><span data-l="vi">Thiết kế, thi công, quản lý và tư vấn cho nhà ở dân dụng và biệt thự cao cấp, trọn gói hoặc từng hạng mục.</span><span data-l="en">Design, construction, management and advice for private homes and high-end villas, as a full package or one stage at a time.</span></p>
+    </div>
+    <div class="services">
+      <div class="service">
+        <h3><span data-l="vi">Thiết kế kiến trúc</span><span data-l="en">Architectural design</span></h3>
+        <p><span data-l="vi">Không gian tinh tế, tối ưu công năng, phản ánh đúng phong cách của từng gia chủ. Bắt đầu bằng khảo sát và đo đạc hiện trạng.</span><span data-l="en">Refined spaces planned around how you live and reflecting your own style. Every design starts with a survey and measurements of the site.</span></p>
+      </div>
+      <div class="service">
+        <h3><span data-l="vi">Thi công xây dựng</span><span data-l="en">Construction</span></h3>
+        <p><span data-l="vi">Từ phần thô đến hoàn thiện nội ngoại thất: vật liệu chọn lọc, kiểm soát chất lượng nghiêm ngặt, đúng tiến độ và có bảo hành rõ ràng.</span><span data-l="en">From structure to interior and exterior finishes: selected materials, strict quality control, on schedule, with a clear warranty.</span></p>
+      </div>
+      <div class="service">
+        <h3><span data-l="vi">Quản lý và giám sát dự án</span><span data-l="en">Project management</span></h3>
+        <p><span data-l="vi">Theo dõi từng công đoạn, kiểm soát tiến độ, chất lượng và chi phí để công trình hoàn thiện đúng như bản thiết kế đã duyệt.</span><span data-l="en">We oversee every stage and keep schedule, quality and cost under control, so the finished building matches the approved design.</span></p>
+      </div>
+      <div class="service">
+        <h3><span data-l="vi">Tư vấn giải pháp</span><span data-l="en">Consulting</span></h3>
+        <p><span data-l="vi">Định hướng sớm về khu đất, ngân sách và giải pháp, cùng hỗ trợ trọn gói hồ sơ pháp lý và xin phép xây dựng. Cải tạo, nâng cấp nhà cũ cũng nằm trong chuyên môn của chúng tôi.</span><span data-l="en">Early advice on site, budget and approach, with full support for legal paperwork and building permits. Renovations and upgrades are part of our work too.</span></p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- Projects -->
+<section class="section on-ink" id="projects" aria-labelledby="projTitle" data-cta="projects">
+  <div class="wrap">
+    <div class="section-head">
+      <h2 class="h-section" id="projTitle"><span data-l="vi">Công trình tiêu biểu</span><span data-l="en">Selected work</span></h2>
+      <p class="muted"><span data-l="vi">Mỗi dự án là một câu chuyện riêng. Chọn một công trình để xem toàn bộ.</span><span data-l="en">Each project tells its own story. Open one to see it in full.</span></p>
+    </div>
+    <div class="filters" id="filters" role="group" aria-label="Lọc dự án"></div>
+    <div class="proj-grid" id="projGrid"></div>
+  </div>
+</section>
+
+<!-- Concepts -->
+<section class="section" id="concepts" aria-labelledby="conceptTitle" data-cta="concepts">
+  <div class="wrap">
+    <div class="section-head">
+      <h2 class="h-section" id="conceptTitle"><span data-l="vi">Ý tưởng thiết kế</span><span data-l="en">Concepts</span></h2>
+      <p class="muted"><span data-l="vi">Những thiết kế mới nhất của ADCO, dựng hình 3D chân thực trước khi thi công.</span><span data-l="en">ADCO's latest designs, shown in lifelike 3D before construction begins.</span></p>
+    </div>
+    <div class="concept-grid" id="conceptGrid"></div>
+  </div>
+</section>
+
+<!-- Proof -->
+<section class="section on-mist" aria-label="ADCO" data-cta="proof">
+  <div class="wrap">
+    <p class="proof">
+      <span data-l="vi"><b>15 năm</b> hành nghề. Công trình tại hơn <b>30 tỉnh thành</b>. <b>3.555+</b> dự án hoàn thành, <b>25+</b> đang triển khai, <b>45+</b> kiến trúc sư và kỹ sư, cùng <b>198+</b> đối tác uy tín.</span>
+      <span data-l="en"><b>15 years</b> in practice. Work in more than <b>30 provinces</b>. <b>3,555+</b> projects completed, <b>25+</b> under way, <b>45+</b> architects and engineers, and <b>198+</b> trusted partners.</span>
+    </p>
+  </div>
+</section>
+
+<!-- Process -->
+<section class="section" id="process" aria-labelledby="procTitle" data-cta="process">
+  <div class="wrap">
+    <div class="section-head">
+      <h2 class="h-section" id="procTitle"><span data-l="vi">Làm việc cùng ADCO</span><span data-l="en">How we work together</span></h2>
+      <p class="muted"><span data-l="vi">Bốn bước rõ ràng, một đội ngũ đồng hành xuyên suốt.</span><span data-l="en">Four clear steps, with the same team beside you throughout.</span></p>
+    </div>
+    <ol class="steps">
+      <li>
+        <h3><span data-l="vi">Tư vấn và ý tưởng</span><span data-l="en">Consultation and concept</span></h3>
+        <p><span data-l="vi">Lắng nghe nhu cầu, khảo sát hiện trạng và phác thảo hướng đi đầu tiên cho ngôi nhà.</span><span data-l="en">We listen, survey the site and sketch the first direction for your home.</span></p>
+      </li>
+      <li>
+        <h3><span data-l="vi">Thiết kế chi tiết</span><span data-l="en">Detailed design</span></h3>
+        <p><span data-l="vi">Hoàn thiện kiến trúc, nội thất và vật liệu, kèm báo giá chi tiết theo diện tích và yêu cầu.</span><span data-l="en">Architecture, interiors and materials are resolved, with a detailed quote based on floor area and scope.</span></p>
+      </li>
+      <li>
+        <h3><span data-l="vi">Triển khai kỹ thuật</span><span data-l="en">Technical drawings</span></h3>
+        <p><span data-l="vi">Hồ sơ kỹ thuật, kết cấu và hồ sơ xin phép xây dựng sẵn sàng cho công trường.</span><span data-l="en">Construction, structural and permit drawings are prepared and made site-ready.</span></p>
+      </li>
+      <li>
+        <h3><span data-l="vi">Thi công và bàn giao</span><span data-l="en">Build and handover</span></h3>
+        <p><span data-l="vi">Giám sát thi công đến khi hoàn thiện, bàn giao công trình kèm chế độ bảo hành rõ ràng.</span><span data-l="en">We supervise construction through to completion and hand over with a clear warranty.</span></p>
+      </li>
+    </ol>
+    <p class="process-note"><span data-l="vi">Thời gian thiết kế thường từ 15 đến 45 ngày, tùy quy mô và yêu cầu.</span><span data-l="en">Design usually takes 15 to 45 days, depending on scale and scope.</span></p>
+  </div>
+</section>
+
+<!-- About / Team -->
+<section class="section on-ink" id="about" aria-labelledby="aboutTitle" data-cta="about">
+  <div class="wrap about-grid">
+    <figure class="about-portrait">
+      <img src="assets/team/cao-hoang-dung.webp" alt="Cao Hoàng Dũng" width="585" height="856" loading="lazy">
+      <figcaption>Cao Hoàng Dũng<span><span data-l="vi">Giám đốc điều hành</span><span data-l="en">Chief Executive Officer</span></span></figcaption>
+    </figure>
+    <div class="about-body">
+      <h2 class="h-section" id="aboutTitle"><span data-l="vi">Chuẩn mực trong kiến trúc, bền vững trong niềm tin</span><span data-l="en">Exacting architecture. Lasting trust.</span></h2>
+      <p><span data-l="vi">ADCO là đơn vị thiết kế, kiến trúc và xây dựng chuyên cho phân khúc cao cấp. Với chúng tôi, kiến trúc không chỉ là dựng lên một không gian mà là tạo ra một giá trị sống bền vững, hài hòa và mang bản sắc của chính chủ nhân.</span><span data-l="en">ADCO is a design and build practice dedicated to high-end homes. To us, architecture is more than putting up a space: it creates a way of living that lasts, feels balanced, and belongs to the people who live there.</span></p>
+      <p><span data-l="vi">Đội ngũ hơn 45 kiến trúc sư, kỹ sư và chuyên gia đặt tâm huyết vào từng bản vẽ, từng chi tiết thi công và từng lần gặp gỡ khách hàng, để trải nghiệm luôn chuẩn mực, minh bạch và trọn vẹn.</span><span data-l="en">More than 45 architects, engineers and specialists put the same care into every drawing, every site detail and every client meeting, so the experience stays exacting, transparent and complete.</span></p>
+      <p class="creed serif"><span data-l="vi">ADCO xây dựng công trình. ADCO xây dựng niềm tin.</span><span data-l="en">ADCO builds buildings. ADCO builds trust.</span></p>
+      <div class="about-links">
+        <a class="btn btn-line" href="https://drive.google.com/file/d/1l7NG18ETlywtIUPe3zUE6qB_zoquQhIz/view" target="_blank" rel="noopener"><span data-l="vi">Xem hồ sơ năng lực</span><span data-l="en">View company profile</span></a>
+        <button class="play" type="button" data-video="SF4aHwxHtZ0"><i><svg viewBox="0 0 10 12" aria-hidden="true"><path d="M0 0l10 6-10 6z"/></svg></i><span data-l="vi">Phim về ADCO</span><span data-l="en">Film about ADCO</span></button>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- Client stories -->
+<section class="section" id="stories" aria-labelledby="storyTitle" data-cta="stories">
+  <div class="wrap">
+    <div class="section-head">
+      <h2 class="h-section" id="storyTitle"><span data-l="vi">Mỗi ngôi nhà bắt đầu từ một mong muốn</span><span data-l="en">Every house starts with a wish</span></h2>
+      <p class="muted"><span data-l="vi">Điều khách hàng tìm đến ADCO, và cách chúng tôi biến điều đó thành công trình.</span><span data-l="en">What our clients came to us for, and how we turned it into a building.</span></p>
+    </div>
+    <div class="stories" id="stories-list"></div>
+  </div>
+</section>
+
+<!-- Journal -->
+<section class="section on-mist" id="journal" aria-labelledby="journalTitle" data-cta="journal">
+  <div class="wrap">
+    <div class="section-head">
+      <h2 class="h-section" id="journalTitle"><span data-l="vi">Kiến thức, xu hướng, góc nhìn</span><span data-l="en">Knowledge, trends and perspective</span></h2>
+      <p class="muted"><span data-l="vi">Những điều nên biết trước khi bắt đầu xây nhà.</span><span data-l="en">What's worth knowing before you start building.</span></p>
+    </div>
+    <div class="posts" id="posts"></div>
+  </div>
+</section>
+
+<!-- FAQ -->
+<section class="section" id="faq" aria-labelledby="faqTitle" data-cta="faq">
+  <div class="wrap faq-grid">
+    <div class="faq-aside">
+      <h2 class="h-section" id="faqTitle"><span data-l="vi">Câu hỏi thường gặp</span><span data-l="en">Common questions</span></h2>
+      <p class="muted"><span data-l="vi">Chưa thấy câu trả lời bạn cần? Gọi <a class="text-link" href="tel:+84908322828">0908 32 28 28</a> hoặc <a class="text-link" href="#contact">gửi câu hỏi</a> cho chúng tôi.</span><span data-l="en">Can't find what you need? Call <a class="text-link" href="tel:+84908322828">0908 32 28 28</a> or <a class="text-link" href="#contact">send us your question</a>.</span></p>
+    </div>
+    <div class="faq-list" id="faqList"></div>
+  </div>
+</section>
+
+<!-- Contact -->
+<section class="section on-ink" id="contact" aria-labelledby="contactTitle">
+  <div class="wrap contact-grid">
+    <div class="contact-info">
+      <h2 class="h-section" id="contactTitle"><span data-l="vi">Kể cho chúng tôi về ngôi nhà bạn mong muốn</span><span data-l="en">Tell us about the home you have in mind</span></h2>
+      <p><span data-l="vi">Dù bạn đang lên ý tưởng cho một ngôi nhà, một không gian làm việc hay một dự án lớn, đội ngũ ADCO sẵn sàng tư vấn từ bước đầu tiên.</span><span data-l="en">Whether it's a home, a workplace or a large development, the ADCO team is ready to advise you from the very first step.</span></p>
+      <dl class="contact-list">
+        <div><dt>Hotline</dt><dd><a class="big" href="tel:+84908322828">0908 32 28 28</a></dd></div>
+        <div><dt>Email</dt><dd><a href="mailto:tuvan.kientrucadco@gmail.com">tuvan.kientrucadco@gmail.com</a><br><a href="mailto:info@kientrucadco.vn">info@kientrucadco.vn</a></dd></div>
+        <div><dt><span data-l="vi">Văn phòng</span><span data-l="en">Studio</span></dt><dd>9 Mỹ Giang 1B, Tân Phong, Quận 7<br><span data-l="vi">TP. Hồ Chí Minh</span><span data-l="en">Ho Chi Minh City, Vietnam</span><br><a class="text-link" href="https://www.google.com/maps/search/?api=1&query=9+M%E1%BB%B9+Giang+1B+T%C3%A2n+Phong+Qu%E1%BA%ADn+7+H%E1%BB%93+Ch%C3%AD+Minh" target="_blank" rel="noopener"><span data-l="vi">Xem trên Google Maps</span><span data-l="en">Open in Google Maps</span></a></dd></div>
+      </dl>
+    </div>
+    <form class="form" id="contactForm" novalidate>
+      <div class="field">
+        <label for="fName"><span data-l="vi">Họ và tên</span><span data-l="en">Full name</span></label>
+        <input id="fName" name="name" autocomplete="name" required>
+        <span class="err" aria-live="polite"></span>
+      </div>
+      <div class="field">
+        <label for="fPhone"><span data-l="vi">Số điện thoại</span><span data-l="en">Phone number</span></label>
+        <input id="fPhone" name="phone" type="tel" autocomplete="tel" inputmode="tel" required>
+        <span class="err" aria-live="polite"></span>
+      </div>
+      <div class="field full">
+        <label for="fEmail">Email</label>
+        <input id="fEmail" name="email" type="email" autocomplete="email">
+        <span class="err" aria-live="polite"></span>
+      </div>
+      <div class="field">
+        <label for="fType"><span data-l="vi">Loại công trình</span><span data-l="en">Type of project</span></label>
+        <select id="fType" name="type"></select>
+      </div>
+      <div class="field">
+        <label for="fService"><span data-l="vi">Dịch vụ quan tâm</span><span data-l="en">Service needed</span></label>
+        <select id="fService" name="service"></select>
+      </div>
+      <div class="field full">
+        <label for="fMsg"><span data-l="vi">Mô tả ngắn về dự án</span><span data-l="en">A few words about your project</span></label>
+        <textarea id="fMsg" name="message" rows="4" data-ph-vi="Vị trí, diện tích, thời gian dự kiến…" data-ph-en="Location, plot size, timing…"></textarea>
+      </div>
+      <div class="form-foot">
+        <small><span data-l="vi">Chúng tôi sẽ liên hệ lại trong vòng một ngày làm việc.</span><span data-l="en">We'll get back to you within one working day.</span></small>
+        <button class="btn btn-amber" type="submit"><span data-l="vi">Gửi yêu cầu tư vấn</span><span data-l="en">Send my request</span></button>
+      </div>
+      <p class="form-status" id="formStatus" role="status"></p>
+    </form>
+  </div>
+</section>
+
+</main>
+
+<footer class="site-footer">
+  <div class="wrap">
+    <div class="foot-grid">
+      <div class="foot-brand">
+        <img src="assets/logo/adco-white.png" alt="ADCO" width="355" height="92" loading="lazy">
+        <p><span data-l="vi">Kiến trúc xây dựng ADCO. Vẽ cuộc sống – Dựng niềm tin.</span><span data-l="en">ADCO Architecture & Construction. Drawing life, building trust.</span></p>
+      </div>
+      <div class="foot-col">
+        <h3><span data-l="vi">Khám phá</span><span data-l="en">Explore</span></h3>
+        <ul>
+          <li><a href="#about"><span data-l="vi">Về ADCO</span><span data-l="en">About</span></a></li>
+          <li><a href="#projects"><span data-l="vi">Dự án</span><span data-l="en">Projects</span></a></li>
+          <li><a href="#concepts"><span data-l="vi">Ý tưởng thiết kế</span><span data-l="en">Concepts</span></a></li>
+          <li><a href="#stories"><span data-l="vi">Khách hàng</span><span data-l="en">Client stories</span></a></li>
+          <li><a href="#journal"><span data-l="vi">Tin tức</span><span data-l="en">Journal</span></a></li>
+        </ul>
+      </div>
+      <div class="foot-col">
+        <h3><span data-l="vi">Dịch vụ</span><span data-l="en">Services</span></h3>
+        <ul>
+          <li><a href="#services"><span data-l="vi">Thiết kế kiến trúc</span><span data-l="en">Architecture</span></a></li>
+          <li><a href="#services"><span data-l="vi">Thi công xây dựng</span><span data-l="en">Construction</span></a></li>
+          <li><a href="#services"><span data-l="vi">Quản lý dự án</span><span data-l="en">Project management</span></a></li>
+          <li><a href="#faq"><span data-l="vi">Hỏi đáp</span><span data-l="en">FAQ</span></a></li>
+        </ul>
+      </div>
+      <div class="foot-col wide">
+        <h3><span data-l="vi">Kết nối</span><span data-l="en">Connect</span></h3>
+        <ul>
+          <li><a href="tel:+84908322828">0908 32 28 28</a></li>
+          <li><a href="mailto:kientrucadco@gmail.com">kientrucadco@gmail.com</a></li>
+          <li><a href="https://www.facebook.com/kientrucxaydungadco" target="_blank" rel="noopener">Facebook</a></li>
+          <li><a href="https://share.google/oPjnkoC18dWG34JQH" target="_blank" rel="noopener">Google</a></li>
+        </ul>
+      </div>
+    </div>
+    <div class="foot-base">
+      <span>© <span id="year">2026</span> Kiến trúc xây dựng ADCO</span>
+      <span>9 Mỹ Giang 1B, Tân Phong, Quận 7, TP. Hồ Chí Minh</span>
+    </div>
+  </div>
+</footer>
+
+<a class="call-fab" href="tel:+84908322828"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" aria-hidden="true"><path d="M5 3h4l2 5-2.5 1.5a11 11 0 0 0 6 6L16 13l5 2v4a2 2 0 0 1-2 2A16 16 0 0 1 3 5a2 2 0 0 1 2-2"/></svg><span data-l="vi">Gọi tư vấn</span><span data-l="en">Call us</span></a>
+
+<!-- Project dialog -->
+<dialog id="projectDialog" aria-labelledby="pdTitle">
+  <div class="dlg-scroll" id="pdScroll">
+    <button class="dlg-close" type="button" data-close><svg viewBox="0 0 16 16" fill="none" stroke-width="1.4" aria-hidden="true"><path d="M1 1l14 14M15 1L1 15"/></svg><span class="sr-only">Đóng / Close</span></button>
+    <div id="pdContent"></div>
+  </div>
+</dialog>
+
+<!-- Article dialog -->
+<dialog id="articleDialog" aria-labelledby="artTitle">
+  <div class="dlg-scroll">
+    <button class="dlg-close" type="button" data-close><svg viewBox="0 0 16 16" fill="none" stroke-width="1.4" aria-hidden="true"><path d="M1 1l14 14M15 1L1 15"/></svg><span class="sr-only">Đóng / Close</span></button>
+    <article class="art" id="artContent"></article>
+  </div>
+</dialog>
+
+<!-- Video dialog -->
+<dialog id="videoDialog" aria-label="Video">
+  <button class="dlg-close" type="button" data-close><svg viewBox="0 0 16 16" fill="none" stroke-width="1.4" aria-hidden="true"><path d="M1 1l14 14M15 1L1 15"/></svg><span class="sr-only">Đóng / Close</span></button>
+  <div class="video-frame" id="videoFrame"></div>
+</dialog>
+
+<script>
+(() => {
+  const A = 'assets/';
+  const CAT = {
+    villa: {vi:'Biệt thự', en:'Villa'},
+    townhouse: {vi:'Nhà phố', en:'Townhouse'},
+    apartment: {vi:'Căn hộ', en:'Apartment'},
+    office: {vi:'Văn phòng', en:'Office'},
+    interior: {vi:'Nội thất căn hộ', en:'Apartment interior'}
+  };
+  const HCMC = {vi:'TP. Hồ Chí Minh', en:'Ho Chi Minh City'};
+
+  const PROJECTS = [
+    {
+      id:'tan-trung-villa', name:'Tân Trung Villa', cats:['villa'], loc:HCMC,
+      img:A+'projects/tan-trung-villa-1200.webp', full:A+'projects/tan-trung-villa-2400.webp', dims:[2323,1441], crop:[0,0,1,1],
+      gallery:[A+'projects/tan-trung-villa-alt.webp'],
+      tag:{vi:'Cân bằng giữa sang trọng, tối giản và bền vững', en:'Luxury, restraint and durability in balance'},
+      story:{
+        vi:['Gia chủ mong muốn một không gian sống biệt lập, yên tĩnh và mang dấu ấn riêng. ADCO cân bằng ba yếu tố sang trọng, tối giản và bền vững: mở rộng các trục ánh sáng để thiên nhiên đi vào từng phòng, dùng vật liệu tự nhiên để tạo chiều sâu và sự ấm áp.',
+            'Ngôi nhà được tổ chức như một hành trình, từ sảnh đón đến phòng khách mở rộng tầm nhìn, rồi tới những không gian riêng tư yên tĩnh tuyệt đối. Một nơi để tạm rời nhịp sống vội và tận hưởng chất lượng sống trọn vẹn hơn.'],
+        en:['The owners wanted a secluded, quiet home with a character of its own. We balanced luxury, restraint and durability: long axes of daylight carry nature into every room, and natural materials bring warmth and depth.',
+            'The house unfolds as a sequence, from the entrance hall to a living room that opens up the view, then on to private rooms kept completely calm. It is a place to step out of the city\'s pace and live more fully.']
+      }
+    },
+    {
+      id:'riverside-house', name:'Riverside House', cats:['villa','townhouse'], loc:HCMC,
+      img:A+'projects/riverside-house-1200.webp', full:A+'projects/riverside-house-2400.webp', dims:[2400,1277], crop:[0,0,1,1],
+      gallery:[A+'projects/riverside-house-alt.webp'],
+      tag:{vi:'Tìm lại sự tĩnh lặng giữa thành phố', en:'Finding stillness inside the city'},
+      wish:{vi:'Anh Lộc muốn một ngôi nhà hướng về dòng sông: sáng mở cửa sổ là bình yên ùa vào, tối trở về là được nghỉ ngơi thật sự.', en:'Mr. Lộc wanted a house facing the river, where calm pours in when the windows open each morning and coming home at night means real rest.'},
+      who:{vi:'Anh Lộc, chủ nhà', en:'Mr. Lộc, homeowner'},
+      story:{
+        vi:['Anh Lộc muốn một ngôi nhà hướng về dòng sông, nơi mỗi sáng mở cửa sổ là cảm giác bình yên, mỗi tối trở về là được nghỉ ngơi thật sự. ADCO để dòng nước trở thành ngôn ngữ chủ đạo, dẫn ánh sáng và gió vào từng góc nhà.',
+            'Các không gian xếp thành nhiều lớp: mở ra để đón gió, khép lại để giữ riêng tư. Vật liệu tự nhiên được ưu tiên để hòa vào nhịp sống ven sông. Riverside House không phô trương; nó chậm rãi bộc lộ vẻ đẹp của sự tinh giản và ấm áp.'],
+        en:['Mr. Lộc wanted a house facing the river: calm when the windows open each morning, real rest on coming home at night. We made water the main language of the design, using it to draw light and breeze into every corner.',
+            'Spaces are layered, opening up to catch the wind and closing in for privacy. Natural materials come first, to sit easily with life on the riverbank. Riverside House doesn\'t show off. Its simplicity and warmth reveal themselves slowly.']
+      }
+    },
+    {
+      id:'49-house', name:'49 House', cats:['apartment'], loc:HCMC,
+      img:A+'projects/49-house-1200.webp', full:A+'projects/49-house-2400.webp', dims:[1674,1946], crop:[0,0,1,1],
+      gallery:[A+'projects/49-house-alt.webp'],
+      tag:{vi:'Nhỏ giữa Sài Gòn, đủ đầy ánh sáng và bình yên', en:'Small, central, and full of light'},
+      wish:{vi:'Anh Tân muốn một ngôi nhà nhỏ giữa Sài Gòn mà vẫn đầy ánh sáng, bình yên và mang chất riêng, nơi bước vào là thấy nhẹ lại.', en:'Mr. Tân wanted a small home in central Saigon that still felt full of light, calm and character, a place where you breathe out as you walk in.'},
+      who:{vi:'Anh Tân, chủ nhà', en:'Mr. Tân, homeowner'},
+      story:{
+        vi:['Anh Tân muốn một ngôi nhà nhỏ giữa Sài Gòn mà vẫn đầy ánh sáng, bình yên và mang chất riêng của người ở. Chúng tôi chọn sự tối giản nhưng không lạnh lẽo, hiện đại nhưng vẫn gần gũi.',
+            'Ánh sáng được dẫn vào như một phần của nội thất; các khoảng mở và đóng tạo sự chuyển tiếp mềm mại giữa các không gian. Mỗi vật liệu được chọn theo tinh thần ít nhưng tinh, để ngôi nhà tinh gọn, trầm ổn và vừa đủ cảm xúc.'],
+        en:['Mr. Tân wanted a small home in central Saigon that still felt full of light, calm and his own character. We aimed for minimal without being cold, and modern without feeling distant.',
+            'Daylight is treated as part of the interior, and a rhythm of open and enclosed spaces lets one room flow into the next. Every material follows the same rule, fewer but better, so the home stays lean, steady and quietly warm.']
+      }
+    },
+    {
+      id:'thu-house', name:'Thu House', cats:['townhouse'], loc:HCMC,
+      img:A+'projects/thu-house-1200.webp', full:A+'projects/thu-house-2400.webp', dims:[2050,1618], crop:[0,0,1,1],
+      gallery:[A+'projects/thu-house-alt.webp'],
+      tag:{vi:'Nơi gia đình là trung tâm', en:'A home built around family'},
+      wish:{vi:'Chị Thu muốn một tổ ấm nhỏ giữa thành phố, đủ dịu dàng để giữ lại những khoảnh khắc bình yên của gia đình.', en:'Ms. Thu wanted a small family home in the city, gentle enough to hold on to quiet moments together.'},
+      who:{vi:'Chị Thu, chủ nhà', en:'Ms. Thu, homeowner'},
+      story:{
+        vi:['Chị Thu muốn một tổ ấm nhỏ giữa thành phố, đủ dịu dàng để giữ lại những khoảnh khắc bình yên của gia đình. ADCO thiết kế dựa trên hai yếu tố: ánh sáng và cảm xúc.',
+            'Những khoảng thở rộng rãi giúp các thành viên luôn kết nối. Nội thất giản lược nhưng tinh tế, nhẹ nhàng mà vẫn đủ hiện đại cho nhịp sống Sài Gòn, cân bằng giữa riêng tư và mở rộng, giữa công năng và vẻ đẹp.'],
+        en:['Ms. Thu wanted a small family home in the city, gentle enough to hold on to quiet moments together. We designed around two things: light and feeling.',
+            'Generous open spaces keep the family connected. Pared-back interiors stay soft yet modern enough for Saigon life, balancing privacy with openness and function with beauty.']
+      }
+    },
+    {
+      id:'villa-dai-phuc', name:'Villa Đại Phúc', cats:['villa'], loc:{vi:'Bình Chánh, TP. Hồ Chí Minh', en:'Binh Chanh, Ho Chi Minh City'},
+      img:A+'projects/villa-dai-phuc-1200.webp', full:A+'projects/villa-dai-phuc-2400.webp', dims:[2048,1402], crop:[0,0,1,1],
+      gallery:['13-1','13-2','15-2','16-1','16-2','17-1','17-2','18-1','18-2','19-1'].map(n => A+'gallery/dai-phuc-'+n+'.webp'),
+      tag:{vi:'Đá tối, gỗ ấm và kính toàn chiều cao', en:'Dark stone, warm timber, full-height glass'},
+      story:{
+        vi:['Biệt thự hiện đại tại Đại Phúc, Bình Chánh. Mặt tiền kết hợp khối đá tối màu với khối gỗ ấm nhô ra, cùng hệ kính cao trọn tầng mở tầm nhìn ra phố.',
+            'Bên trong, tông tối trầm được cân bằng bằng gỗ sáng, giếng trời và cây xanh, từ phòng ngủ, sảnh thang đến phòng tắm mở ra khoảng vườn.'],
+        en:['A modern villa in Đại Phúc, Bình Chánh. The façade pairs dark stone with a projecting volume of warm timber, and full-height glass opens each floor to the street.',
+            'Inside, the deep, dark palette is balanced with pale timber, skylights and planting, from the bedrooms and stair hall to a bathroom that opens onto the garden.']
+      }
+    }
+  ];
+
+  // Design concepts from ADCO's recent Facebook posts (3D visualisations, not yet built)
+  const conceptPhotos = (slug, n) => Array.from({length: n}, (_, i) => `${A}concepts/${slug}/${String(i + 1).padStart(2, '0')}.webp`);
+  const CONCEPTS = [
+    {
+      id:'concept-office', name:{vi:'Văn phòng làm việc', en:'Office Building'}, cats:['office'],
+      img:A+'concepts/office/cover-card.webp', full:A+'concepts/office/cover-full.webp', dims:[1284,1698], crop:[0,0,1,1],
+      gallery:conceptPhotos('office', 9),
+      tag:{vi:'Hiện đại, sang trọng, tối ưu không gian', en:'Modern, refined and space-efficient'},
+      story:{
+        vi:['Một tòa văn phòng hiện đại, tinh tế và tối ưu công năng, nơi mỗi đường nét được chăm chút để tạo nên giá trị bền vững. Mặt tiền nhiều lớp với ban công cây xanh và lam gỗ, đón ánh sáng tự nhiên vào từng tầng.',
+            'Bên trong, sảnh thông tầng mở ra khu làm việc chung, phòng họp và phòng giám đốc. Mảng xanh được đưa vào khắp không gian, và từng chi tiết được nghiên cứu kỹ để vừa đẹp vừa vận hành hiệu quả.'],
+        en:['A modern office building, refined and planned around how people work, with every line considered for lasting value. A layered façade of planted balconies and timber fins draws daylight into every floor.',
+            'Inside, a double-height lobby opens onto an open-plan workspace, a meeting room and a director\'s office. Greenery runs through every space, and each detail is worked out to look good and run efficiently.']
+      }
+    },
+    {
+      id:'concept-eco-retreat', name:'Villa Eco Retreat', cats:['villa'],
+      loc:{vi:'Bến Lức, Tây Ninh', en:'Ben Luc, Tay Ninh'}, client:{vi:'Chị Mai Hoa', en:'Ms. Mai Hoa'},
+      img:A+'concepts/eco-retreat/cover-card.webp', full:A+'concepts/eco-retreat/cover-full.webp', dims:[1536,2048], crop:[0,0,1,1],
+      gallery:conceptPhotos('eco-retreat', 17),
+      tag:{vi:'Hiện đại, mộc mạc, gần gũi thiên nhiên', en:'Modern, rustic and close to nature'},
+      story:{
+        vi:['Villa tại Eco Retreat được thiết kế theo phong cách hiện đại, mộc mạc và gần gũi thiên nhiên. Công trình nổi bật với gỗ, đá và những chi tiết chạm khắc nghệ thuật, bao quanh bởi cây xanh và mặt nước.',
+            'Kiến trúc, nội thất và cảnh quan hòa làm một: hồ sen trước nhà, hồ bơi tràn bờ hướng ra sông, phòng khách thông tầng với vách chạm khắc. Một không gian sống sang trọng, ấm cúng và mang dấu ấn riêng của gia chủ.'],
+        en:['The villa at Eco Retreat is designed to be modern, rustic and close to nature. It is defined by timber, stone and hand-carved details, surrounded by planting and water.',
+            'Architecture, interiors and landscape work as one: a lotus pond at the front, an infinity pool facing the river, and a double-height living room framed by carved panels. A home that feels luxurious and warm, and unmistakably its owner\'s.']
+      }
+    },
+    {
+      id:'concept-green-paradise', name:'Villa Vinhomes Green Paradise', cats:['villa'],
+      loc:{vi:'Cần Giờ, TP. Hồ Chí Minh', en:'Can Gio, Ho Chi Minh City'},
+      img:A+'concepts/green-paradise/cover-card.webp', full:A+'concepts/green-paradise/cover-full.webp', dims:[1430,1907], crop:[0,0,1,1],
+      gallery:conceptPhotos('green-paradise', 16),
+      tag:{vi:'Hiện đại, sang trọng, cá nhân hóa theo từng gia chủ', en:'Modern, luxurious and tailored to each owner'},
+      story:{
+        vi:['Biệt thự ven biển tại Vinhomes Green Paradise, Cần Giờ, được ADCO thiết kế trọn gói từ kiến trúc, nội thất đến xây dựng. Mặt tiền nhiều lớp với lam gỗ đứng và kính lớn mở ra biển và rặng dừa.',
+            'Bên trong, phòng khách và phòng ăn hướng thẳng ra bãi cát, các phòng ngủ đón gió biển, sân hồ cá koi nằm giữa nhà và phòng thờ giữ nét trang nghiêm. Mỗi không gian được cá nhân hóa theo phong cách sống của gia chủ.'],
+        en:['A beachfront villa at Vinhomes Green Paradise in Can Gio, designed by ADCO end to end, from architecture and interiors to construction. A layered façade of vertical timber fins and broad glazing opens onto the sea and the palms.',
+            'Inside, the living and dining rooms look straight out to the sand, the bedrooms catch the sea breeze, a koi courtyard sits at the heart of the house, and the ancestral altar room keeps its quiet dignity. Every room is shaped around the way its owners live.']
+      }
+    },
+    {
+      id:'concept-infiniti-riviera', name:'The Infiniti Riviera Point', cats:['interior'],
+      loc:{vi:'Tân Mỹ, TP. Hồ Chí Minh', en:'Tan My, Ho Chi Minh City'},
+      img:A+'concepts/infiniti-riviera/cover-card.webp', full:A+'concepts/infiniti-riviera/cover-full.webp', dims:[1152,2048], crop:[0,0,1,1],
+      gallery:conceptPhotos('infiniti-riviera', 18),
+      tag:{vi:'Nội thất để nâng tầm giá trị sống', en:'Interiors that raise the way you live'},
+      story:{
+        vi:['Nội thất đẹp không chỉ để ngắm mà để nâng tầm giá trị sống. Tại The Infiniti Riviera Point, ADCO thiết kế từ phòng khách thông tầng với cầu thang xoắn, phòng ngủ chuẩn nghỉ dưỡng, phòng tắm phong cách resort đến không gian bếp hiện đại.',
+            'Mọi không gian cân bằng giữa công năng và thẩm mỹ, được dựng hình 3D chân thực trước khi thi công để gia chủ thấy rõ ngôi nhà của mình, và ADCO đồng hành từ ý tưởng đến ngày hoàn thiện.'],
+        en:['Beautiful interiors should do more than look good; they should raise the way you live. At The Infiniti Riviera Point, ADCO designed everything from a double-height living room with a spiral staircase to resort-style bedrooms and bathrooms and a modern kitchen.',
+            'Every space balances function and beauty, shown in lifelike 3D before construction so the owners can see their home first, with ADCO alongside them from first idea to finished space.']
+      }
+    }
+  ];
+
+  const FAQ = [
+    {q:{vi:'ADCO cung cấp những dịch vụ nào?', en:'What services does ADCO offer?'}, a:{vi:'Thiết kế kiến trúc, thi công xây dựng, quản lý dự án và tư vấn: giải pháp tổng thể cho công trình dân dụng và biệt thự cao cấp.', en:'Architectural design, construction, project management and consulting: a complete service for private homes and high-end villas.'}},
+    {q:{vi:'ADCO có khảo sát hiện trạng trước khi thiết kế không?', en:'Do you survey the site before designing?'}, a:{vi:'Có. Chúng tôi khảo sát, đo đạc và nghiên cứu hiện trạng để giải pháp thiết kế chính xác và tối ưu nhất.', en:'Yes. We survey, measure and study the existing site so the design is accurate and makes the most of it.'}},
+    {q:{vi:'Quy trình làm việc với ADCO diễn ra như thế nào?', en:'What does the process look like?'}, a:{vi:'Gồm 4 bước: tư vấn và ý tưởng, thiết kế chi tiết, triển khai kỹ thuật, giám sát thi công và hoàn thiện.', en:'Four steps: consultation and concept, detailed design, technical drawings, then construction supervision and handover.'}},
+    {q:{vi:'Thiết kế một dự án kiến trúc mất bao lâu?', en:'How long does the design take?'}, a:{vi:'Tùy quy mô và yêu cầu, thời gian thiết kế thường từ 15 đến 45 ngày.', en:'Depending on scale and scope, design usually takes 15 to 45 days.'}},
+    {q:{vi:'ADCO có nhận thi công trọn gói không?', en:'Do you offer turnkey construction?'}, a:{vi:'Có. Chúng tôi thi công trọn gói từ phần thô đến hoàn thiện nội và ngoại thất.', en:'Yes. We build turnkey, from the structural shell through to interior and exterior finishes.'}},
+    {q:{vi:'Chi phí thiết kế được tính như thế nào?', en:'How is the design fee calculated?'}, a:{vi:'Chi phí dựa trên diện tích, phong cách kiến trúc và mức độ yêu cầu kỹ thuật. ADCO gửi báo giá chi tiết sau khi nắm rõ nhu cầu của bạn.', en:'Fees depend on floor area, architectural style and technical requirements. We send a detailed quote once we understand what you need.'}},
+    {q:{vi:'ADCO có nhận cải tạo, nâng cấp nhà không?', en:'Do you take on renovations?'}, a:{vi:'Có. Chúng tôi có kinh nghiệm với các công trình cải tạo đòi hỏi kỹ thuật cao, đảm bảo công năng và thẩm mỹ tối ưu.', en:'Yes. We have experience with technically demanding renovations, improving both how a home works and how it looks.'}},
+    {q:{vi:'Vật liệu và hạng mục thi công có được bảo hành không?', en:'Are materials and workmanship under warranty?'}, a:{vi:'Có. Vật liệu và hạng mục thi công đều có chế độ bảo hành rõ ràng theo tiêu chuẩn nhà cung cấp và cam kết của ADCO.', en:'Yes. Materials and workmanship carry a clear warranty, backed by supplier standards and ADCO\'s own commitment.'}},
+    {q:{vi:'ADCO có hỗ trợ xin phép xây dựng không?', en:'Can you handle the building permit?'}, a:{vi:'Có. Chúng tôi hỗ trợ trọn gói hồ sơ pháp lý, xin phép xây dựng và các thủ tục liên quan.', en:'Yes. We handle the legal paperwork, the building permit and related procedures for you.'}},
+    {q:{vi:'Làm thế nào để bắt đầu dự án với ADCO?', en:'How do I start a project with ADCO?'}, a:{vi:'Gọi hotline 0908 32 28 28 hoặc gửi thông tin qua biểu mẫu bên dưới. Đội ngũ của chúng tôi sẽ tư vấn chi tiết và đồng hành ngay từ bước đầu tiên.', en:'Call 0908 32 28 28 or send your details through the form below. Our team will walk you through everything from the very first step.'}}
+  ];
+
+  const POSTS = [
+    {
+      img:A+'gallery/dai-phuc-19-1.webp',
+      t:{vi:'Thiết kế một ngôi nhà mất bao lâu?', en:'How long does it take to design a house?'},
+      ex:{vi:'Từ 15 đến 45 ngày, và vì sao con số phụ thuộc vào bạn nhiều hơn bạn nghĩ.', en:'Between 15 and 45 days, and why that number depends on you more than you might think.'},
+      body:{
+        vi:['Với phần lớn nhà ở dân dụng, thời gian thiết kế tại ADCO dao động từ 15 đến 45 ngày. Khoảng chênh lệch đến từ quy mô công trình, phong cách kiến trúc và mức độ chi tiết kỹ thuật mà dự án đòi hỏi.',
+            'Mọi dự án đều bắt đầu bằng khảo sát và đo đạc hiện trạng. Sau đó là bốn bước: tư vấn và ý tưởng, thiết kế chi tiết, triển khai kỹ thuật, và giám sát thi công. Quyết định càng rõ ràng ở bước ý tưởng, các bước sau càng nhanh.',
+            'Lời khuyên của chúng tôi: hãy dành thời gian cho buổi tư vấn đầu tiên. Đó là lúc chúng tôi hiểu cách gia đình bạn sống, và là nền móng cho mọi bản vẽ sau này.'],
+        en:['For most private homes, design at ADCO takes between 15 and 45 days. The range depends on the size of the building, its architectural style and how much technical detail it needs.',
+            'Every project starts with a survey and measurements of the site. Then come four steps: consultation and concept, detailed design, technical drawings, and construction supervision. The clearer the decisions at concept stage, the faster everything after it moves.',
+            'Our advice: give the first consultation real time. It\'s where we learn how your family lives, and it underpins every drawing that follows.']
+      }
+    },
+    {
+      img:A+'gallery/dai-phuc-17-2.webp',
+      t:{vi:'Thi công trọn gói bao gồm những gì?', en:'What does a turnkey build include?'},
+      ex:{vi:'Từ phần thô đến hoàn thiện, cùng hồ sơ pháp lý và bảo hành, tất cả qua một đầu mối.', en:'From structure to finishes, plus permits and warranty, all through one point of contact.'},
+      body:{
+        vi:['Thi công trọn gói nghĩa là một đơn vị chịu trách nhiệm toàn bộ: từ phần thô, kết cấu đến hoàn thiện nội và ngoại thất. Bạn không phải điều phối nhiều nhà thầu, và chất lượng được kiểm soát theo một tiêu chuẩn duy nhất.',
+            'Tại ADCO, gói trọn gói còn bao gồm hỗ trợ hồ sơ pháp lý, xin phép xây dựng và quản lý giám sát để tiến độ, chất lượng và chi phí luôn được kiểm soát.',
+            'Vật liệu và hạng mục thi công đều có chế độ bảo hành rõ ràng, theo tiêu chuẩn của nhà cung cấp và cam kết của chính chúng tôi.'],
+        en:['A turnkey build means one company is responsible for everything, from the structural shell to interior and exterior finishes. You don\'t coordinate several contractors, and quality is held to a single standard.',
+            'At ADCO, turnkey also covers the legal paperwork and building permit, plus project management that keeps schedule, quality and cost under control.',
+            'Materials and workmanship come with a clear warranty, backed by supplier standards and our own commitment.']
+      }
+    },
+    {
+      img:A+'gallery/dai-phuc-16-1.webp',
+      t:{vi:'Cải tạo nhà cũ: vì sao phải bắt đầu từ khảo sát', en:'Renovating: why it starts with a site survey'},
+      ex:{vi:'Một ngôi nhà cũ luôn có những điều bản vẽ không cho bạn biết.', en:'An older house always holds things the drawings won\'t tell you.'},
+      body:{
+        vi:['Cải tạo thường khó hơn xây mới: kết cấu cũ, hệ thống kỹ thuật đã xuống cấp, và những thay đổi qua nhiều năm mà bản vẽ gốc không ghi lại.',
+            'Vì vậy ADCO luôn khảo sát, đo đạc và nghiên cứu hiện trạng trước khi đưa ra giải pháp. Nhờ đó thiết kế chính xác, dự toán sát thực tế và hạn chế phát sinh trong lúc thi công.',
+            'Chúng tôi đã xử lý nhiều công trình cải tạo có yêu cầu kỹ thuật cao, nâng cấp cả công năng lẫn thẩm mỹ mà vẫn giữ lại những giá trị gia chủ muốn gìn giữ.'],
+        en:['Renovating is often harder than building new: an older structure, worn-out services, and years of changes the original drawings never recorded.',
+            'That\'s why ADCO always surveys, measures and studies the existing building before proposing anything. The design is accurate, the estimate matches reality, and surprises on site are kept to a minimum.',
+            'We have taken on many technically demanding renovations, improving how a home works and looks while keeping what its owners want to preserve.']
+      }
+    }
+  ];
+
+  const TYPES = [
+    {v:'villa', vi:'Biệt thự', en:'Villa'},
+    {v:'townhouse', vi:'Nhà phố', en:'Townhouse'},
+    {v:'apartment', vi:'Căn hộ', en:'Apartment'},
+    {v:'renovation', vi:'Cải tạo nhà', en:'Renovation'},
+    {v:'other', vi:'Khác', en:'Other'}
+  ];
+  const SERVICES = [
+    {v:'design-build', vi:'Thiết kế và thi công trọn gói', en:'Design and build'},
+    {v:'design', vi:'Thiết kế kiến trúc', en:'Architectural design'},
+    {v:'build', vi:'Thi công xây dựng', en:'Construction'},
+    {v:'management', vi:'Quản lý, giám sát dự án', en:'Project management'},
+    {v:'consult', vi:'Tư vấn giải pháp', en:'Consulting'}
+  ];
+
+  const UI = {
+    all:{vi:'Tất cả', en:'All'},
+    view:{vi:'Xem dự án', en:'View project'},
+    read:{vi:'Đọc bài', en:'Read article'},
+    category:{vi:'Loại hình', en:'Type'},
+    location:{vi:'Địa điểm', en:'Location'},
+    client:{vi:'Gia chủ', en:'Client'},
+    done:{vi:'Hoàn thành', en:'Completed'},
+    next:{vi:'Dự án tiếp theo', en:'Next project'},
+    similar:{vi:'Bạn đang tìm một thiết kế tương tự?', en:'Looking for a similar design?'},
+    cta:{vi:'Đặt lịch tư vấn', en:'Book a consultation'},
+    filterLabel:{vi:'Lọc dự án', en:'Filter projects'},
+    navLabel:{vi:'Chính', en:'Main'},
+    home:{vi:'ADCO, trang chủ', en:'ADCO, home'},
+    errName:{vi:'Vui lòng nhập họ và tên.', en:'Please enter your name.'},
+    errPhone:{vi:'Nhập số điện thoại để chúng tôi gọi lại, ví dụ 0901 234 567.', en:'Enter a phone number so we can call you back, e.g. 0901 234 567.'},
+    errEmail:{vi:'Email chưa đúng định dạng, ví dụ ten@email.com.', en:'That email doesn\'t look right, e.g. name@email.com.'},
+    sent:{vi:'Ứng dụng email của bạn đã mở sẵn yêu cầu. Nhấn gửi để hoàn tất, hoặc gọi 0908 32 28 28.', en:'Your email app has opened with your request. Press send to finish, or call 0908 32 28 28.'},
+    title:{vi:'Kiến trúc xây dựng ADCO | Thiết kế kiến trúc & thi công xây dựng', en:'ADCO Architecture & Construction | Design and build in Vietnam'},
+    desc:{vi:'ADCO thiết kế kiến trúc và thi công trọn gói biệt thự, nhà phố, căn hộ cao cấp tại TP. Hồ Chí Minh và hơn 30 tỉnh thành. Vẽ cuộc sống – Dựng niềm tin.', en:'ADCO designs and builds high-end villas, townhouses and apartments in Ho Chi Minh City and more than 30 provinces. Drawing life, building trust.'}
+  };
+
+  let lang = 'vi';
+  let filter = 'all';
+  const t = o => o[lang];
+  const nm = p => typeof p.name === 'string' ? p.name : t(p.name);
+  const $ = s => document.querySelector(s);
+  const esc = s => String(s).replace(/[&<>"]/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));
+
+  /* Language */
+  function setLang(next) {
+    lang = next === 'en' ? 'en' : 'vi';
+    document.documentElement.lang = lang;
+    document.querySelectorAll('[data-set-lang]').forEach(b => b.setAttribute('aria-pressed', String(b.dataset.setLang === lang)));
+    document.title = t(UI.title);
+    document.querySelector('meta[name=description]').content = t(UI.desc);
+    $('#nav').setAttribute('aria-label', t(UI.navLabel));
+    $('.brand').setAttribute('aria-label', t(UI.home));
+    $('#filters').setAttribute('aria-label', t(UI.filterLabel));
+    document.querySelectorAll('[data-ph-vi]').forEach(el => el.placeholder = el.dataset['ph' + (lang === 'vi' ? 'Vi' : 'En')]);
+    try { localStorage.setItem('adco-lang', lang); } catch (e) {}
+    renderAll();
+  }
+  document.querySelectorAll('[data-set-lang]').forEach(b => b.addEventListener('click', () => setLang(b.dataset.setLang)));
+
+  /* Projects */
+  function renderFilters() {
+    const keys = ['all', 'villa', 'townhouse', 'apartment'];
+    $('#filters').innerHTML = keys.map(k =>
+      `<button type="button" data-filter="${k}" aria-pressed="${k === filter}">${esc(k === 'all' ? t(UI.all) : t(CAT[k]))}</button>`).join('');
+  }
+  function catLabel(p) { return p.cats.map(c => t(CAT[c])).join(', '); }
+  // Frames a region (crop fractions) of an image so it covers its box; the shipped renders are already cropped
+  function cropped(p, cls, lazy, src = p.img) {
+    const [x, y, w, h] = p.crop, [nw, nh] = p.dims;
+    return `<div class="crop-frame ${cls}"><div class="crop" style="--x:${x};--y:${y};--w:${w};--h:${h};--ar:${(w * nw) / (h * nh)}"><img src="${src}" alt="${esc(nm(p))}"${lazy ? ' loading="lazy"' : ''}></div></div>`;
+  }
+  function renderProjects() {
+    const list = PROJECTS.filter(p => filter === 'all' || p.cats.includes(filter));
+    $('#projGrid').innerHTML = list.map(p => `
+      <button class="proj-card" type="button" data-project="${p.id}">
+        ${cropped(p, 'ph', true)}
+        <div class="cap">
+          <h3>${esc(nm(p))}</h3>
+          <span class="tag">${esc(t(p.tag))}</span>
+          <span class="meta">${esc(catLabel(p))}, ${esc(t(p.loc))}</span>
+        </div>
+      </button>`).join('');
+  }
+  $('#filters').addEventListener('click', e => {
+    const b = e.target.closest('[data-filter]');
+    if (!b) return;
+    filter = b.dataset.filter;
+    renderFilters(); renderProjects();
+  });
+
+  let openProjectId = null;
+  function renderProjectDialog(id) {
+    const list = PROJECTS.some(x => x.id === id) ? PROJECTS : CONCEPTS;
+    const i = list.findIndex(x => x.id === id);
+    const p = list[i];
+    const next = list[(i + 1) % list.length];
+    const facts = [[t(UI.category), catLabel(p)]];
+    if (p.loc) facts.push([t(UI.location), t(p.loc)]);
+    if (p.client) facts.push([t(UI.client), t(p.client)]);
+    const gallery = (p.gallery || [p.img]).map(src => `<img src="${src}" alt="${esc(nm(p))}" loading="lazy">`).join('');
+    $('#pdContent').innerHTML = `
+      <div class="pd-hero-slot">${cropped(p, 'pd-hero', false, p.full)}</div>
+      <div class="wrap">
+        <div class="pd-body">
+          <header>
+            <h2 id="pdTitle" class="pd-title"><span>${esc(nm(p))}</span></h2>
+            <p class="pd-tag rise" style="--i:1">${esc(t(p.tag))}</p>
+            <dl class="pd-facts rise" style="--i:2">${facts.map(([k, v]) => `<dt>${esc(k)}</dt><dd>${esc(v)}</dd>`).join('')}</dl>
+          </header>
+          <div class="pd-story">${t(p.story).map((s, k) => `<p class="rise" style="--i:${3 + k}">${esc(s)}</p>`).join('')}</div>
+        </div>
+        <div class="cta-strip pd-cta rise" style="--i:5">
+          <p>${esc(t(UI.similar))}</p>
+          <div class="pd-cta-actions">
+            <button class="btn btn-line" type="button" data-project="${next.id}">${esc(t(UI.next))}<span class="pd-cta-next">${esc(nm(next))}</span></button>
+            <a class="btn btn-amber" href="#contact" data-close>${esc(t(UI.cta))}</a>
+          </div>
+        </div>
+        ${gallery ? `<div class="pd-gallery rise" style="--i:6">${gallery}</div>` : ''}
+        <div class="pd-next rise" style="--i:7">
+          <span></span>
+          <button type="button" data-project="${next.id}"><span>${esc(t(UI.next))}</span>${esc(nm(next))}</button>
+        </div>
+      </div>`;
+  }
+
+  const reduceMotion = () => matchMedia('(prefers-reduced-motion: reduce)').matches;
+  // origin: the card image clicked, if any. The hero grows out of it; otherwise it settles in with a slow zoom.
+  function openProject(id, origin) {
+    const d = $('#projectDialog');
+    const wasOpen = d.open;
+    openProjectId = id;
+    d.classList.remove('revealed', 'pd-closing');
+    renderProjectDialog(id);
+    if (!wasOpen) d.showModal();
+    $('#pdScroll').scrollTop = 0;
+    if (reduceMotion()) { d.classList.add('revealed'); return; }
+
+    // Start states are committed with a forced layout read rather than requestAnimationFrame,
+    // which browsers pause in background tabs
+    const hero = $('#pdContent .pd-hero');
+    const reveal = () => { d.offsetWidth; d.classList.add('revealed'); };
+    if (!origin || wasOpen) {
+      hero.classList.add('settle');
+      reveal();
+      return;
+    }
+    const from = origin.getBoundingClientRect();
+    const to = hero.parentElement.getBoundingClientRect();
+    const px = r => ({left: r.left + 'px', top: r.top + 'px', width: r.width + 'px', height: r.height + 'px'});
+    d.classList.add('pd-intro');
+    Object.assign(hero.style, {position: 'fixed', right: 'auto', bottom: 'auto', zIndex: 3}, px(from));
+    hero.getBoundingClientRect();
+    d.classList.remove('pd-intro');
+    hero.style.transition = ['left', 'top', 'width', 'height'].map(p => p + ' .9s var(--ease)').join(',');
+    Object.assign(hero.style, px(to));
+    let done = false;
+    const finish = () => {
+      if (done) return;
+      done = true;
+      hero.removeAttribute('style');
+      reveal();
+    };
+    hero.addEventListener('transitionend', e => { if (e.propertyName === 'width') finish(); });
+    setTimeout(finish, 1000);
+  }
+  function closeProject() {
+    const d = $('#projectDialog');
+    if (reduceMotion()) { d.close(); return; }
+    d.classList.add('pd-closing');
+    setTimeout(() => { d.close(); d.classList.remove('pd-closing', 'revealed'); }, 450);
+  }
+  document.addEventListener('click', e => {
+    const b = e.target.closest('[data-project]');
+    if (b) { e.preventDefault(); openProject(b.dataset.project, b.querySelector('.ph')); }
+  });
+
+  function renderConcepts() {
+    $('#conceptGrid').innerHTML = CONCEPTS.map(p => `
+      <button class="concept-card" type="button" data-project="${p.id}">
+        ${cropped(p, 'ph', true)}
+        <h3>${esc(nm(p))}</h3>
+        <span class="tag">${esc(t(p.tag))}</span>
+        <span class="meta">${esc(catLabel(p))}${p.loc ? ', ' + esc(t(p.loc)) : ''}</span>
+      </button>`).join('');
+  }
+
+  /* Stories */
+  function renderStories() {
+    $('#stories-list').innerHTML = PROJECTS.filter(p => p.wish).map(p => `
+      <div class="story">
+        <p class="serif">${esc(t(p.wish))}</p>
+        <span class="who">${esc(t(p.who))}</span>
+        <button class="text-link" type="button" data-project="${p.id}">${esc(nm(p))}</button>
+      </div>`).join('');
+  }
+
+  /* Journal */
+  function renderPosts() {
+    $('#posts').innerHTML = POSTS.map((p, i) => `
+      <button class="post" type="button" data-post="${i}">
+        <div class="ph"><img src="${p.img}" alt="" loading="lazy"></div>
+        <h3>${esc(t(p.t))}</h3>
+        <p>${esc(t(p.ex))}</p>
+        <span class="text-link">${esc(t(UI.read))}</span>
+      </button>`).join('');
+  }
+  let openPost = null;
+  function renderArticle(i) {
+    const p = POSTS[i];
+    $('#artContent').innerHTML = `<img src="${p.img}" alt=""><h2 id="artTitle">${esc(t(p.t))}</h2>${t(p.body).map(s => `<p>${esc(s)}</p>`).join('')}<a class="btn btn-amber" href="#contact" data-close>${esc(t(UI.cta))}</a>`;
+  }
+  $('#posts').addEventListener('click', e => {
+    const b = e.target.closest('[data-post]');
+    if (!b) return;
+    openPost = +b.dataset.post;
+    renderArticle(openPost);
+    $('#articleDialog').showModal();
+    $('#articleDialog .dlg-scroll').scrollTop = 0;
+  });
+
+  /* FAQ */
+  function renderFaq() {
+    const open = [...document.querySelectorAll('#faqList details')].map(d => d.open);
+    $('#faqList').innerHTML = FAQ.map((f, i) => `
+      <details${open[i] ? ' open' : ''}><summary>${esc(t(f.q))}</summary><p>${esc(t(f.a))}</p></details>`).join('');
+  }
+
+  /* Form selects */
+  function renderSelects() {
+    const fill = (sel, items) => {
+      const cur = sel.value;
+      sel.innerHTML = items.map(o => `<option value="${o.v}">${esc(o[lang])}</option>`).join('');
+      if (cur) sel.value = cur;
+    };
+    fill($('#fType'), TYPES);
+    fill($('#fService'), SERVICES);
+  }
+
+  function renderAll() {
+    renderFilters(); renderProjects(); renderConcepts(); renderStories(); renderPosts(); renderFaq(); renderSelects();
+    if ($('#projectDialog').open && openProjectId) renderProjectDialog(openProjectId);
+    if ($('#articleDialog').open && openPost !== null) renderArticle(openPost);
+  }
+
+  /* Dialogs */
+  document.querySelectorAll('dialog').forEach(d => {
+    const dismiss = () => d.id === 'projectDialog' ? closeProject() : d.close();
+    d.addEventListener('cancel', e => { if (d.id === 'projectDialog') { e.preventDefault(); closeProject(); } });
+    d.addEventListener('click', e => {
+      const c = e.target.closest('[data-close]');
+      if (c) {
+        const href = c.getAttribute('href');
+        if (href) { e.preventDefault(); d.close(); document.querySelector(href).scrollIntoView(); }
+        else dismiss();
+      } else if (e.target === d) dismiss();
+    });
+  });
+  $('#videoDialog').addEventListener('close', () => { $('#videoFrame').innerHTML = ''; });
+  document.querySelectorAll('[data-video]').forEach(b => b.addEventListener('click', () => {
+    $('#videoFrame').innerHTML = `<iframe src="https://www.youtube-nocookie.com/embed/${b.dataset.video}?autoplay=1&rel=0" title="ADCO film" allow="autoplay; encrypted-media; picture-in-picture" allowfullscreen></iframe>`;
+    $('#videoDialog').showModal();
+  }));
+
+  /* Trust strip: two identical halves so translateX(-50%) loops seamlessly */
+  // [file, name, display height]: heights are optically balanced so wide and compact marks read the same size
+  const LOGOS = [
+    ['vinhomes', 'Vinhomes', 61, 240, 108], ['novaland', 'Novaland', 77, 216, 168], ['pland', 'Pland', 57, 253, 98],
+    ['southern-homes', 'Southern Homes', 63, 239, 117], ['rich-land', 'Rich Land', 85, 157, 150]
+  ];
+  const logoSet = hidden => LOGOS.concat(LOGOS).map(([f, name, h, w0, h0]) =>
+    `<img src="${A}partners/${f}.png" alt="${hidden ? '' : name}" width="${w0}" height="${h0}" style="--h:${h}"${hidden ? ' aria-hidden="true"' : ''}>`).join('');
+  $('#logoTrack').innerHTML = logoSet(false) + logoSet(true);
+
+  /* Consultation prompt at the end of each section */
+  const CTA_LINES = {
+    signature:{vi:'Ngôi nhà của bạn cũng có một câu chuyện. Hãy kể cho chúng tôi.', en:'Your home has a story too. Tell it to us.'},
+    services:{vi:'Chưa chắc cần dịch vụ nào? Kiến trúc sư sẽ giúp bạn chọn.', en:'Not sure which service you need? An architect will help you choose.'},
+    projects:{vi:'Muốn một ngôi nhà như thế này?', en:'Want a home like these?'},
+    concepts:{vi:'Thích một ý tưởng? Chúng tôi sẽ điều chỉnh theo nhu cầu của bạn.', en:'Like one of these concepts? We\'ll adapt it to your needs.'},
+    proof:{vi:'Hãy để công trình tiếp theo là của bạn.', en:'Make the next project yours.'},
+    process:{vi:'Bước đầu tiên chỉ là một buổi trò chuyện.', en:'Step one is simply a conversation.'},
+    about:{vi:'Gặp trực tiếp đội ngũ ADCO.', en:'Meet the ADCO team in person.'},
+    stories:{vi:'Mong muốn của bạn cho ngôi nhà là gì?', en:'What do you wish for in your home?'},
+    journal:{vi:'Có câu hỏi về dự án của riêng bạn?', en:'Questions about your own project?'},
+    faq:{vi:'Vẫn còn thắc mắc? Hỏi trực tiếp kiến trúc sư.', en:'Still unsure? Ask an architect directly.'}
+  };
+  document.querySelectorAll('[data-cta]').forEach(sec => {
+    const line = CTA_LINES[sec.dataset.cta];
+    const strip = document.createElement('div');
+    strip.className = 'cta-strip';
+    strip.innerHTML = `<p><span data-l="vi">${esc(line.vi)}</span><span data-l="en">${esc(line.en)}</span></p>
+      <a class="btn btn-amber" href="#contact"><span data-l="vi">Đặt lịch tư vấn</span><span data-l="en">Book a consultation</span></a>`;
+    sec.querySelector('.wrap').appendChild(strip);
+  });
+
+  // Every booking button lands the visitor in the form, ready to type (desktop only, to spare phones the keyboard pop)
+  document.addEventListener('click', e => {
+    if (!e.target.closest('a[href="#contact"]') || !matchMedia('(pointer:fine)').matches) return;
+    setTimeout(() => $('#fName').focus({preventScroll:true}), 700);
+  });
+
+  /* Header & menu */
+  const header = $('#siteHeader');
+  const onScroll = () => header.classList.toggle('solid', window.scrollY > 40);
+  window.addEventListener('scroll', onScroll, {passive:true}); onScroll();
+  const menuBtn = $('#menuBtn');
+  const setMenu = open => { document.body.classList.toggle('menu-open', open); menuBtn.setAttribute('aria-expanded', String(open)); header.classList.toggle('solid', open || window.scrollY > 40); };
+  menuBtn.addEventListener('click', () => setMenu(menuBtn.getAttribute('aria-expanded') !== 'true'));
+  $('#nav').addEventListener('click', e => { if (e.target.closest('a')) setMenu(false); });
+  document.addEventListener('keydown', e => { if (e.key === 'Escape') setMenu(false); });
+
+  // Header booking button appears only once the hero's booking button has scrolled out of view
+  const heroCta = $('.hero-actions .btn-amber');
+  const setHeroCta = on => document.body.classList.toggle('hero-cta-on', on);
+  const r0 = heroCta.getBoundingClientRect();
+  setHeroCta(r0.bottom > header.offsetHeight && r0.top < innerHeight); // settle the first paint without animating
+  new IntersectionObserver(([e]) => setHeroCta(e.isIntersecting), {rootMargin: `-${header.offsetHeight}px 0px 0px 0px`}).observe(heroCta);
+  setTimeout(() => document.body.classList.add('header-anim'), 100);
+
+  /* Contact form */
+  const form = $('#contactForm');
+  function fieldError(input, msg) {
+    const f = input.closest('.field');
+    f.querySelector('.err').textContent = msg || '';
+    if (msg) { f.setAttribute('data-invalid', ''); input.setAttribute('aria-invalid', 'true'); }
+    else { f.removeAttribute('data-invalid'); input.removeAttribute('aria-invalid'); }
+  }
+  form.addEventListener('submit', e => {
+    e.preventDefault();
+    const name = form.name.value.trim(), phone = form.phone.value.trim(), email = form.email.value.trim();
+    let first = null;
+    const check = (input, bad, msg) => { fieldError(input, bad ? t(msg) : ''); if (bad && !first) first = input; };
+    check(form.name, !name, UI.errName);
+    check(form.phone, phone.replace(/\D/g, '').length < 9, UI.errPhone);
+    check(form.email, email && !/^[^@\s]+@[^@\s]+\.[^@\s]+$/.test(email), UI.errEmail);
+    if (first) { first.focus(); return; }
+    const type = TYPES.find(o => o.v === form.type.value), svc = SERVICES.find(o => o.v === form.service.value);
+    const subject = (lang === 'vi' ? 'Yêu cầu tư vấn từ ' : 'Consultation request from ') + name;
+    const body = [
+      (lang === 'vi' ? 'Họ tên: ' : 'Name: ') + name,
+      (lang === 'vi' ? 'Điện thoại: ' : 'Phone: ') + phone,
+      email ? 'Email: ' + email : '',
+      (lang === 'vi' ? 'Loại công trình: ' : 'Project type: ') + type[lang],
+      (lang === 'vi' ? 'Dịch vụ: ' : 'Service: ') + svc[lang],
+      '', form.message.value.trim()
+    ].filter((l, i) => l || i === 5).join('\n');
+    window.location.href = 'mailto:tuvan.kientrucadco@gmail.com?subject=' + encodeURIComponent(subject) + '&body=' + encodeURIComponent(body);
+    $('#formStatus').textContent = t(UI.sent);
+  });
+  ['name', 'phone', 'email'].forEach(n => form[n].addEventListener('input', () => fieldError(form[n], '')));
+
+  $('#year').textContent = new Date().getFullYear();
+
+  let saved = null;
+  try { saved = localStorage.getItem('adco-lang'); } catch (e) {}
+  setLang(saved || 'vi');
+})();
+</script>
+</body>
+</html>
