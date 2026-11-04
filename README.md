@@ -12,12 +12,11 @@ python3 -m http.server 8417
 
 Then open http://localhost:8417.
 
-## Publish it
+## Hosting
 
-Upload `index.html` and the `assets/` folder to any static host, for example Netlify (drag the folder onto app.netlify.com/drop), GitHub Pages or Vercel.
+Live at https://adco.homes, hosted on Vercel from this repository: every push to `main` deploys automatically. The domain is registered at Spaceship, with DNS records there pointing to Vercel (`A @ 76.76.21.21`, `CNAME www cname.vercel-dns.com`).
 
 ## Before going live
 
-- The contact form opens the visitor's email app addressed to tuvan.kientrucadco@gmail.com. Connect it to a form service (for example Netlify Forms) so requests are sent directly.
-- The social-share image (`og:image`) still points to the old site. Point it at a file in `assets/` once the new site has its address.
+- The contact form opens the visitor's email app addressed to tuvan.kientrucadco@gmail.com. Connect it to a form service so requests are sent directly.
 - Confirm the office address: the site says "9 Mỹ Giang 1B, Tân Phong, Quận 7"; recent Facebook posts use "Phú Mỹ Hưng, Tân Hưng".
