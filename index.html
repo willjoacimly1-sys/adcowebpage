@@ -377,11 +377,13 @@ dialog::backdrop{background:rgba(25,21,20,.8)}
   .header-tools{margin-left:auto}
 }
 @media (max-width:960px){
-  .hero{grid-template-columns:1fr;padding-top:120px;align-items:start}
+  /* Phones/tablets: the photo sits behind the headline as a full-bleed background */
+  .hero{grid-template-columns:1fr;padding-top:120px;align-items:end}
   .hero-copy{grid-column:1;grid-row:1}
-  .hero-figure{grid-column:1;grid-row:2;min-height:0;aspect-ratio:4/3;margin-top:48px}
-  .hero-figure::after{background:linear-gradient(180deg,var(--ink) 0%,rgba(25,21,20,0) 30%)}
-  .hero-figure figcaption{bottom:-30px}
+  .hero-figure{position:absolute;inset:0;grid-area:auto;min-height:0;z-index:0}
+  .hero-figure img{object-position:72% 50%}
+  .hero-figure::after{background:linear-gradient(180deg,rgba(25,21,20,.55) 0%,rgba(25,21,20,.45) 30%,rgba(25,21,20,.8) 62%,var(--ink) 100%)}
+  .hero-figure figcaption{top:96px;bottom:auto;right:var(--gutter);z-index:1;color:rgba(255,255,255,.75)}
   .section-head h2,.section-head p{grid-column:1/-1}
   .signature-grid h2,.statement,.signature-note{grid-column:1/-1}
   .service h3,.service p{grid-column:1/-1}
@@ -406,9 +408,9 @@ dialog::backdrop{background:rgba(25,21,20,.8)}
 @media (max-width:560px){
   .header-inner{gap:12px;height:72px}
   .header-tools{--tools-gap:8px}
-  .header-tools .lang{display:none}
-  .nav-lang{display:flex;align-self:flex-start;margin-top:28px}
-  .header-cta{min-height:40px;padding:0 14px;font-size:13px}
+  /* No room for both: phones keep the language switch in the header; booking stays on the hero button and the floating call button */
+  .header-cta{display:none}
+  .header-tools .lang button{width:36px;height:32px}
   .trust{padding:32px 0 24px}
   .marquee-track img{height:calc(var(--h,64) * .72px);margin-right:44px}
   .cta-strip .btn{width:100%;justify-content:center}
