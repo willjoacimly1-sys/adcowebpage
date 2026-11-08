@@ -2,3 +2,6 @@
 assets-src/
 .claude/
 .DS_Store
+
+# Private sales material, not part of the public site
+lead-kit/
